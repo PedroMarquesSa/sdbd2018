@@ -3,7 +3,7 @@ BASE:
 chave1 | valor1 ; chave2 | valor dois
 
 Exemplo:
-type | login ; username | tintin ; password | unicorn; id | 123456789;  serverId | 1
+type|login;username|tintin;password|unicorn;id|123456789;serverId|1
 
 - divisao de itens por ';' e cada elemento por ' | '
 - dependendo do TYPE temos a divisao por itens diferente
