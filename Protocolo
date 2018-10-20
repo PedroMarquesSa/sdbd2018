@@ -3,7 +3,9 @@ BASE:
 chave1 | valor1 ; chave2 | valor dois
 
 Exemplo:
-type | login ; username | tintin ; password | unicorn
+type | login ; username | tintin ; password | unicorn; id | 123456789
 
--divisao de itens por ';' e cada elemento por ' | '
+- divisao de itens por ';' e cada elemento por ' | '
 - dependendo do TYPE temos a divisao por itens diferente
+- id -> random com 9 digitos que fica sempre associado ao pacote para confirmar a resposta
+
