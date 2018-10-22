@@ -1,19 +1,56 @@
 
+
 BASE:
 chave1 | valor1 ; chave2 | valor dois
 
 Exemplo:
-type|login;username|tintin;password|unicorn;id|123456789;serverId|1
+type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|accepted;
 
 - divisao de itens por ';' e cada elemento por ' | '
 - dependendo do TYPE temos a divisao por itens diferente
 - id -> random com 9 digitos que fica sempre associado ao pacote para confirmar a resposta
 - serverId -> id do Server (multicast) que vai responder (funcao de verificacao no server) (funcao de atribuicao de id no cliente)
+- status -> accepted/rejected (indica se um dos servers aceitou o pacote e a accao foi efetuada)
+
+LOGIN:
+type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|accepted;
 
 REGISTO:
-
 type|register;username|nome;password|pass;id|123456789;serverId|1;status|accepted;
 
-- id -> random com 9 digitos que fica sempre associado ao pacote para confirmar a resposta
-- serverId -> id do Server (multicast) que vai responder (funcao de verificacao no server) (funcao de atribuicao de id no cliente)
-- status -> accepted/rejected
+INTRODUZIR ARTISTA:
+type|new_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
+
+INTRODUZIR ALBUM:
+type|new_album;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
+(Será preciso indicar também o artista?)
+
+INTRODUZIR MUSICA:
+type|new_music;music_name|Monday;id|123456789;serverId|1;status|rejected;
+(Será preciso indicar também o artista e o album?)
+
+PESQUISA POR ARTISTA:
+type|search_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
+
+PESQUISA POR ALBUM:
+type|search_album;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
+
+CONSULTAR DETALHES ALBUM:
+type|album_details;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
+
+CONSULTAR DETALHES ARTISTA:
+type|artist_details;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
+
+EDITAR DETALHES ALBUM (talvez dar essa opcao quando consultados os detalhes?)
+type|new_album_details;album_name|OK Computer;details|string_com_os_detalhes;id|123456789;serverId|1;status|rejected;
+
+ESCREVER CRITICA SOBRE UM ALBUM (apenas albuns ja adicionados):
+type|album_critic;album_name|OK Computer;critic|string_com_a_critica;id|123456789;serverId|1;status|rejected;
+
+DAR PRIVILEGIOS DE EDITOR A UM UTILIZADOR:
+type|privileges;editor_username|nome;editor_password|pass;username|nome;id|123456789;serverId|1;status|rejected;
+
+UPLOAD DE FICHEIRO PARA ASSOCIAR A UMA MUSICA EXISTENTE (é preciso indicar album e artista?):
+type|upload;music|Monday;album|Telluric;artist|Matt Corby;file|file_path;id|123456789;serverId|1;status|rejected;
+
+PARTILHAR UM FICHEIRO MUSICAL E PERMITIR O RESPETIVO DOWNLOAD?
