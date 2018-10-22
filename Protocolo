@@ -9,3 +9,11 @@ type|login;username|tintin;password|unicorn;id|123456789;serverId|1
 - dependendo do TYPE temos a divisao por itens diferente
 - id -> random com 9 digitos que fica sempre associado ao pacote para confirmar a resposta
 - serverId -> id do Server (multicast) que vai responder (funcao de verificacao no server) (funcao de atribuicao de id no cliente)
+
+REGISTO:
+
+type|register;username|nome;password|pass;id|123456789;serverId|1;status|accepted;
+
+- id -> random com 9 digitos que fica sempre associado ao pacote para confirmar a resposta
+- serverId -> id do Server (multicast) que vai responder (funcao de verificacao no server) (funcao de atribuicao de id no cliente)
+- status -> accepted/rejected
