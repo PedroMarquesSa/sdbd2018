@@ -17,11 +17,15 @@ cliente:
 type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|null;
 server:
 type|login;username|tintin;password|unicorn;id|123456789;status|accepted;
+type|login;username|tintin;password|unicorn;id|123456789;status|wrongpassword;
+type|login;username|tintin;password|unicorn;id|123456789;status|wrongusername;
 
 REGISTO:
 cliente: 
 type|register;username|nome;password|pass;id|123456789;serverId|1;status|null;
+server:
 type|register;username|nome;password|pass;id|123456789;status|accepted;
+type|register;username|nome;password|pass;id|123456789;status|rejected;
 
 INTRODUZIR ARTISTA:
 type|new_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
