@@ -19,7 +19,9 @@ server:
 type|login;username|tintin;password|unicorn;id|123456789;status|accepted;
 
 REGISTO:
-type|register;username|nome;password|pass;id|123456789;serverId|1;status|accepted;
+cliente: 
+type|register;username|nome;password|pass;id|123456789;serverId|1;status|null;
+type|register;username|nome;password|pass;id|123456789;status|accepted;
 
 INTRODUZIR ARTISTA:
 type|new_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
