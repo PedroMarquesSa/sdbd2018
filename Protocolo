@@ -13,7 +13,10 @@ type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|accep
 - status -> accepted/rejected (indica se um dos servers aceitou o pacote e a accao foi efetuada)
 
 LOGIN:
-type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|accepted;
+cliente:
+type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|null;
+server:
+type|login;username|tintin;password|unicorn;id|123456789;status|accepted;
 
 REGISTO:
 type|register;username|nome;password|pass;id|123456789;serverId|1;status|accepted;
