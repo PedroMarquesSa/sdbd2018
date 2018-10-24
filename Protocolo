@@ -32,7 +32,8 @@ cliente:
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|null;
 server:
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|accepted;
-type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|rejected;
+type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|wrongusername; //caso nao exista esse User
+type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|rejected; //caso nao tenha permissao para isso
 
 INTRODUZIR ARTISTA:
 type|new_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
