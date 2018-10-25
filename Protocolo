@@ -41,6 +41,7 @@ cliente:
 type|search_artist;username|nome;artist_name|Quim Barreiros;description|mensagem;birth_date|1.12.1998;id|123456789;serverId|1;status|null; //mensagem -> texto de descricao
 server:
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|accepted;
+type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|nopermission; //nao tem permissoes para adicionar
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|rejected; //ja existe
 
 INTRODUZIR ALBUM:
