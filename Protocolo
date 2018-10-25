@@ -45,8 +45,13 @@ type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|nop
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|rejected; //ja existe
 
 INTRODUZIR ALBUM:
-type|new_album;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
-(Será preciso indicar também o artista?)
+cliente:
+type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;description|descricao;id|123456789;serverId|1;status|null;
+server:
+type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|accepted;
+type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|rejected; //ja existe
+type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|nopermission;
+(Será preciso indicar também o artista?) -> SIM
 
 INTRODUZIR MUSICA:
 type|new_music;music_name|Monday;id|123456789;serverId|1;status|rejected;
