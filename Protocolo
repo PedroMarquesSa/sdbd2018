@@ -80,7 +80,10 @@ type|search_album;artist_name|Radiohead;album_name|OK Computer;id|123456789;stat
 type|search_album;album_name|OK Computer;id|123456789;status|notfound; //nao existe album com esse nome
 
 CONSULTAR DETALHES ALBUM:
-type|album_details;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
+cliente:
+type|album_details;artist_name|Radiohead;album_name|OK Computer;count|id|123456789;serverId|1;status|null;
+server:
+type|album_details;artist_name|Radiohead;album_name|OK Computer;description|id|123456789;status|accepted;
 
 CONSULTAR DETALHES ARTISTA:
 type|artist_details;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
