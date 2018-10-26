@@ -38,13 +38,13 @@ type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;s
 
 INTRODUZIR ARTISTA: //preciso do username para saber se é editor ou admin para poder alterar ou adicionar
 cliente:
-type|search_artist;username|nome;artist_name|Quim Barreiros;description|mensagem;birth_date|1.12.1998;id|123456789;serverId|1;status|null; //mensagem -> texto de descricao
+type|new_artist;username|nome;artist_name|Quim Barreiros;description|mensagem;birth_date|1.12.1998;id|123456789;serverId|1;status|null; //mensagem -> texto de descricao
 server:
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|accepted;
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|nopermission; //nao tem permissoes para adicionar
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|rejected; //ja existe
 
-INTRODUZIR ALBUM:
+INTRODUZIR ALBUM: 
 cliente:
 type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;description|descricao;id|123456789;serverId|1;status|null;
 server:
@@ -62,11 +62,22 @@ type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_
 type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|nopermission;
 (Será preciso indicar também o artista e o album?)
 
-PESQUISA POR ARTISTA:
-type|search_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
 
-PESQUISA POR ALBUM:
-type|search_album;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
+PESQUISA POR ARTISTA: (devolve albuns que depois podem ser selecionados)
+cliente:
+type|search_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|null;
+server:
+type|search_artist;artist_name|Quim Barreiros;count|2;albums|album1+album2:id|123456789;status|accepted; //contador para saber quantos albuns se manda
+## ATENCAO: Albuns separadas por "+" ##
+type|search_artist;artist_name|Quim Barreiros;id|123456789;status|empty; //nao existem albuns
+type|search_artist;artist_name|Quim Barreiros;id|123456789;status|notfound;
+
+PESQUISA POR ALBUM: (devolve o album procurado, caso exista, com o artista associado)
+cliente:
+type|search_album;album_name|OK Computer;id|123456789;serverId|1;status|null;
+server:
+type|search_album;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|accepted;
+type|search_album;album_name|OK Computer;id|123456789;status|notfound; //nao existe album com esse nome
 
 CONSULTAR DETALHES ALBUM:
 type|album_details;album_name|OK Computer;id|123456789;serverId|1;status|rejected;
