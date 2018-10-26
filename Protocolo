@@ -83,7 +83,8 @@ CONSULTAR DETALHES ALBUM:
 cliente:
 type|album_details;artist_name|Radiohead;album_name|OK Computer;count|id|123456789;serverId|1;status|null;
 server:
-type|album_details;artist_name|Radiohead;album_name|OK Computer;description|id|123456789;status|accepted;
+type|album_details;artist_name|Radiohead;album_name|OK Computer;description|descricao;ratingAVG|9.2;countMusic|3;music|musica1+musica2+musica3;countReview|2;reviews|7+descricao*10+descricao;id|123456789;status|accepted;
+type|album_details;artist_name|Radiohead;album_name|OK Computer;count|id|123456789;status|null;
 
 CONSULTAR DETALHES ARTISTA:
 type|artist_details;artist_name|Quim Barreiros;id|123456789;serverId|1;status|rejected;
