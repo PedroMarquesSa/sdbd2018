@@ -30,36 +30,10 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         String protocol = "type|login;username|"+username+";password|"+password+";id|123456789;serverId|"+serverID+";status|"+status;
         System.out.println(protocol+"\n");
         
-        /*
         MulticastClient client = new MulticastClient();
         client.start();
         MulticastUser user = new MulticastUser(protocol);
         user.start();
-        */
-
-        String MULTICAST_ADDRESS = "224.0.227.1";
-        int PORT = 4321;
-
-            MulticastSocket socket = null;
-            try {
-                socket = new MulticastSocket(PORT);  // create socket and bind it
-                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-                socket.joinGroup(group);
-                while (true) {
-                    byte[] buffer = new byte[256];
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    socket.receive(packet);
-
-                    System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
-                    String message = new String(packet.getData(), 0, packet.getLength());
-                    System.out.println(message);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                socket.close();
-            }
-        
         
         return "Login efectuado com sucesso!";
     }
