@@ -31,6 +31,7 @@ public class RMIClient {
         int regNumber=7000, opcao=0;
         Registry reg = null;
         RMIInterface rmiinterface = null;
+        boolean trueOrFalse;
 
         try{
             reg = LocateRegistry.getRegistry("127.0.0.1", regNumber);
@@ -38,38 +39,45 @@ public class RMIClient {
             System.out.println("Connected to RMIServer registry "+regNumber);  
             //registarRMIClient(rmiinterface);
         }catch (Exception e) {
-            System.out.println(e);
+            //System.out.println(e);
+            System.out.println("Sem conexao ao servidor!");
+            System.exit(0);
             //e.printStackTrace();
         }
 
-        System.out.println("\nO que deseja fazer?\n   1)Registar\n   2)Login");
-        System.out.print(">>");
-        opcao = sc.nextInt();
 
-    
-        while(opcao!=1 && opcao!=2){
-            System.out.println("Opcao nao encontrada!");
+        trueOrFalse = false;
+        while(trueOrFalse==false){
             System.out.println("\nO que deseja fazer?\n   1)Registar\n   2)Login");
             System.out.print(">>");
             opcao = sc.nextInt();
-        }
 
-        if(opcao==1){
-            try{
-                registarRMIClient(rmiinterface);
-            }catch (Exception e) {
-                System.out.println(e);
+            while(opcao!=1 && opcao!=2){
+                System.out.println("Opcao nao encontrada!");
+                System.out.println("\nO que deseja fazer?\n   1)Registar\n   2)Login");
+                System.out.print(">>");
+                opcao = sc.nextInt();
+            }  
+
+            if(opcao==1){
+                try{
+                    trueOrFalse = registarRMIClient(rmiinterface);
+                }catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+            else if(opcao==2){
+                try{
+                    trueOrFalse = loginRMIClient(rmiinterface);
+                }catch (Exception e) {
+                    System.out.println(e);
+                } 
             }
         }
-        else if(opcao==2){
-            try{
-                loginRMIClient(rmiinterface);
-            }catch (Exception e) {
-                System.out.println(e);
-            } 
-        }
+        
 
-        boolean trueOrFalse = true;
+
+        trueOrFalse = true;
         while(trueOrFalse == true){
                 sc.nextLine();
                 System.out.println("\nQue pretende fazer?");
@@ -94,7 +102,7 @@ public class RMIClient {
             
     }
     
-    public static void loginRMIClient(RMIInterface rmiinterface) throws RemoteException{
+    public static boolean loginRMIClient(RMIInterface rmiinterface) throws RemoteException{
         String text, username, password;
         Scanner sc = new Scanner(System.in);
         System.out.println("\n-----LOGIN-----");
@@ -104,9 +112,24 @@ public class RMIClient {
         password = sc.nextLine();
         text = rmiinterface.loginRMIServer(username, password);
         System.out.println("Server: "+text);
+        if(text.equals("accepted")){
+            System.out.println("Login efetuado com sucesso!");
+            return true;
+        }
+        else if(text.equals("wrongusername")){
+            System.out.println("Utilizador inexistente!");
+            return false;
+        }
+        else if(text.equals("wrongpassword")){
+            System.out.println("Utilizador inexistente!");
+            return false;
+        }
+        System.out.println("Ocorreu alguma falha no sistema. Tente novamente.");
+        return false;
+        
     }
      
-    public static void registarRMIClient(RMIInterface rmiinterface) throws RemoteException{
+    public static boolean registarRMIClient(RMIInterface rmiinterface) throws RemoteException{
         String text, username, password;
         Scanner sc = new Scanner(System.in);
         System.out.println("\n-----REGISTAR NOVO UTILIZADOR-----");
@@ -116,6 +139,17 @@ public class RMIClient {
         password = sc.nextLine();
         text = rmiinterface.registarRMIServer(username, password);
         System.out.println("Server: "+text);
+        if(text.equals("accepted")){
+            System.out.println("Utilizador registado com sucesso!");
+            //return true;
+            return false;
+        }
+        else if(text.equals("rejected")){
+            System.out.println("Registo rejeitado. Tente novamente.");
+            return false;
+        }
+        System.out.println("Ocorreu alguma falha no sistema. Tente novamente.");
+        return false;
     }
     
 }

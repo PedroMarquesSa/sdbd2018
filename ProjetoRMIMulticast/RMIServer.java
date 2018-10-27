@@ -32,16 +32,52 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         
         MulticastClient client = new MulticastClient();
         client.start();
+
         MulticastUser user = new MulticastUser(protocol);
         user.start();
         
-        return "Login efectuado com sucesso!";
+        //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
+        String respostaClient = null;
+        try{
+        Thread.sleep(500);
+        respostaClient = client.getResposta();
+        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+        String[] parts = respostaClient.split(";");
+        //System.out.println("parts[4]= "+parts[4]);
+        String[] parts2 = parts[4].split("\\|");
+        System.out.println("parts2[1]= "+parts2[1]);
+        return parts2[1];
     }
     
     @Override
     public String registarRMIServer(String username, String password) throws RemoteException{
-       System.out.println("type|signup;username|"+username+";password|"+password);
-       return "Registo efectuado com sucesso!";
+        int serverID = 1;
+        String status = "null";
+        String protocol = "type|register;username|"+username+";password|"+password+";id|123456789;serverId|"+serverID+";status|"+status;
+        
+        System.out.println(protocol+"\n");
+
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        MulticastUser user = new MulticastUser(protocol);
+        user.start();
+
+        //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
+        String respostaClient = null;
+        try{
+        Thread.sleep(500);
+        respostaClient = client.getResposta();
+        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+        String[] parts = respostaClient.split(";");
+        //System.out.println("parts[4]= "+parts[4]);
+        String[] parts2 = parts[4].split("\\|");
+        status = parts2[1];
+        System.out.println("parts2[1]= "+parts2[1]);
+
+        return parts2[1];
     }
     
     @Override
@@ -108,7 +144,17 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     static class MulticastClient extends Thread{
         private String MULTICAST_ADDRESS = "224.0.227.1";
         private int PORT = 4321;
+        
+        private String resposta;
 
+        public void setResposta(String message) {
+            resposta = message;
+        }
+
+        public String getResposta(){
+            return resposta;
+        }
+        
         public void run() {
             MulticastSocket socket = null;
             try {
@@ -123,6 +169,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                     System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                     String message = new String(packet.getData(), 0, packet.getLength());
                     System.out.println(message);
+                    System.out.println("De novo "+message);
+                    setResposta(message);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -130,12 +178,23 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                 socket.close();
             }
         }
+
     }
 
     static class MulticastUser extends Thread {
         private String MULTICAST_ADDRESS = "224.0.227.1";
         private int PORT = 4321;
         String protocol;
+        /*
+        private String resposta;
+
+        public void setResposta(String message) {
+            resposta = message;
+        }
+
+        public String getResposta(){
+            return resposta;
+        }*/
 
         public MulticastUser(String protocol) {
             super("User " + (long) (Math.random() * 1000));
@@ -152,6 +211,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                 InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, PORT);
                 socket.send(packet);
+
+                //setResposta(packet);
             }catch (IOException e) {
                 e.printStackTrace();
             } finally {
