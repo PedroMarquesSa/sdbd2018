@@ -33,6 +33,8 @@ public class RMIClient {
         RMIInterface rmiinterface = null;
         boolean trueOrFalse;
 
+        String username=null, password=null;
+
         try{
             reg = LocateRegistry.getRegistry("127.0.0.1", regNumber);
             rmiinterface = (RMIInterface) reg.lookup("rmiserver");
@@ -67,15 +69,22 @@ public class RMIClient {
                 }
             }
             else if(opcao==2){
+                String lixo = sc.nextLine();
+                System.out.println("\n-----LOGIN-----");
+                System.out.print("Username:");
+                username = sc.nextLine();
+                System.out.print("Password:");
+                password = sc.nextLine();    
+            
                 try{
-                    trueOrFalse = loginRMIClient(rmiinterface);
+                    trueOrFalse = loginRMIClient(rmiinterface, username, password);
                 }catch (Exception e) {
                     System.out.println(e);
                 } 
             }
         }
         
-
+        System.out.println("Prima enter");
 
         trueOrFalse = true;
         while(trueOrFalse == true){
@@ -95,7 +104,7 @@ public class RMIClient {
                 opcao = sc.nextInt();
                 if(opcao==7){
                     try{
-                        privilegiosEditorRMIClient(rmiinterface);
+                        privilegiosEditorRMIClient(rmiinterface, username, password);
                     }catch (Exception e) {
                         System.out.println(e);
                     }
@@ -110,14 +119,8 @@ public class RMIClient {
             
     }
     
-    public static boolean loginRMIClient(RMIInterface rmiinterface) throws RemoteException{
-        String text, username, password;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n-----LOGIN-----");
-        System.out.print("Username:");
-        username = sc.nextLine();
-        System.out.print("Password:");
-        password = sc.nextLine();
+    public static boolean loginRMIClient(RMIInterface rmiinterface, String username, String password) throws RemoteException{
+        String text;
         text = rmiinterface.loginRMIServer(username, password);
         System.out.println("Server: "+text);
         if(text.equals("accepted")){
@@ -160,15 +163,10 @@ public class RMIClient {
         return false;
     }
 
-    public static void privilegiosEditorRMIClient(RMIInterface rmiinterface) throws RemoteException{
-        String text, username, password, usernameDest;
+    public static void privilegiosEditorRMIClient(RMIInterface rmiinterface, String usernameReceived, String passwordReceived) throws RemoteException{
+        String usernameDest, username = usernameReceived, password = passwordReceived, text;
         Scanner sc = new Scanner(System.in);
-        System.out.println("\n-----QUAL O SEU USERNAME E PASSWORD-----");
-        System.out.print("Username:");
-        username = sc.nextLine();
-        System.out.print("Password:");
-        password = sc.nextLine();
-        System.out.println("\n-----QUAL O SEU USERNAME DO UTILIZADOR QUE PRETENDE PROMOVER A EDITOR-----");
+        System.out.println("\n-----QUAL O USERNAME DO UTILIZADOR QUE PRETENDE PROMOVER A EDITOR-----");
         System.out.print("Username utilizador:");
         usernameDest = sc.nextLine();
         text = rmiinterface.privilegiosEditorRMIServer(username, password, usernameDest);
