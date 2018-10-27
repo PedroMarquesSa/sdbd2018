@@ -4,6 +4,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 import java.net.*;
 import java.io.*;
+import java.util.Random;
 /**/
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,11 +24,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     
     @Override
     public String loginRMIServer(String username, String password) throws RemoteException{
-       
+        
         int serverID = 1;
         String status = "null";
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
         System.out.println("\nLogin info received: username|"+username+", password|"+password);
-        String protocol = "type|login;username|"+username+";password|"+password+";id|123456789;serverId|"+serverID+";status|"+status;
+        String protocol = "type|login;username|"+username+";password|"+password+";id|"+id+";serverId|"+serverID+";status|"+status;
         System.out.println(protocol+"\n");
         
         MulticastClient client = new MulticastClient();
@@ -52,9 +57,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     
     @Override
     public String registarRMIServer(String username, String password) throws RemoteException{
+        
         int serverID = 1;
         String status = "null";
-        String protocol = "type|register;username|"+username+";password|"+password+";id|123456789;serverId|"+serverID+";status|"+status;
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
+        String protocol = "type|register;username|"+username+";password|"+password+";id|"+id+";serverId|"+serverID+";status|"+status;
         
         System.out.println(protocol+"\n");
 
@@ -80,6 +90,41 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         return parts2[1];
     }
     
+    @Override
+    public String privilegiosEditorRMIServer(String username, String password, String usernameDest) throws RemoteException{
+        
+        int serverID = 1;
+        String status = "null";
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
+        String protocol = "type|promote;username|"+username+";password|"+password+";usernameDest|"+usernameDest+";id|"+id+";serverId|"+serverID+";status|"+status;
+        
+        System.out.println(protocol+"\n");
+
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        MulticastUser user = new MulticastUser(protocol);
+        user.start();
+
+        //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
+        String respostaClient = null;
+        try{
+        Thread.sleep(500);
+        respostaClient = client.getResposta();
+        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+        String[] parts = respostaClient.split(";");
+        //System.out.println("parts[4]= "+parts[4]);
+        String[] parts2 = parts[5].split("\\|");
+        status = parts2[1];
+        System.out.println("parts2[1]= "+parts2[1]);
+
+        return parts2[1];
+    }
+
     @Override
     public Boolean ping(){
         return true;

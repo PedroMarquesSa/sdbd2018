@@ -14,9 +14,11 @@ import java.rmi.RemoteException;
  */
 public interface RMIInterface extends Remote{
 	
-    public String loginRMIServer(String text, String password) throws RemoteException;
+    public String loginRMIServer(String username, String password) throws RemoteException;
     
-    public String registarRMIServer(String text, String password) throws RemoteException;
+    public String registarRMIServer(String username, String password) throws RemoteException;
+
+    public String privilegiosEditorRMIServer(String username, String password, String usernameDest) throws RemoteException;
 
     public Boolean ping() throws RemoteException;
 }

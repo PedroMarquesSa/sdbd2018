@@ -81,22 +81,30 @@ public class RMIClient {
         while(trueOrFalse == true){
                 sc.nextLine();
                 System.out.println("\nQue pretende fazer?");
-                System.out.println("   1)Introduzir artistas, albuns e musicas");
-                System.out.println("   2)Pesquisar albuns por artista e por titulo de album");
-                System.out.println("   3)Consultar detalhes de album (incluindo musicas e criticas)");
-                System.out.println("   4)Editar detalhes de album (incluindo musicas)");
-                System.out.println("   5)Escrever critica sobre um album (com pontuacao)");
-                System.out.println("   6)Consultar detalhes de artista (e.g., discografia, biografia)");
+                System.out.println("   1)Introduzir artistas, albuns e musicas (POR IMPLEMENTAR)");
+                System.out.println("   2)Pesquisar albuns por artista e por titulo de album (POR IMPLEMENTAR)");
+                System.out.println("   3)Consultar detalhes de album (incluindo musicas e criticas) (POR IMPLEMENTAR)");
+                System.out.println("   4)Editar detalhes de album (incluindo musicas) (POR IMPLEMENTAR)");
+                System.out.println("   5)Escrever critica sobre um album (com pontuacao) (POR IMPLEMENTAR)");
+                System.out.println("   6)Consultar detalhes de artista (e.g., discografia, biografia) (POR IMPLEMENTAR)");
                 System.out.println("   7)Dar privilegios de editor a um utilizador");
-                System.out.println("   8)Upload de ficheiro para associar a uma musica existente");
-                System.out.println("   9)Partilhar um ficheiro musical e permitir o respetivo download");
+                System.out.println("   8)Upload de ficheiro para associar a uma musica existente (POR IMPLEMENTAR)");
+                System.out.println("   9)Partilhar um ficheiro musical e permitir o respetivo download (POR IMPLEMENTAR)");
                 System.out.println("   10)Logout");
                 System.out.print(">>");
                 opcao = sc.nextInt();
-
-                if(opcao==10){
-                    trueOrFalse = false;
+                if(opcao==7){
+                    try{
+                        privilegiosEditorRMIClient(rmiinterface);
+                    }catch (Exception e) {
+                        System.out.println(e);
+                    }
                 }
+                if(opcao==10)
+                    trueOrFalse = false;
+                /*
+                else
+                    System.out.println("Opcao invalida!");*/
                 
             }
             
@@ -151,5 +159,38 @@ public class RMIClient {
         System.out.println("Ocorreu alguma falha no sistema. Tente novamente.");
         return false;
     }
+
+    public static void privilegiosEditorRMIClient(RMIInterface rmiinterface) throws RemoteException{
+        String text, username, password, usernameDest;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n-----QUAL O SEU USERNAME E PASSWORD-----");
+        System.out.print("Username:");
+        username = sc.nextLine();
+        System.out.print("Password:");
+        password = sc.nextLine();
+        System.out.println("\n-----QUAL O SEU USERNAME DO UTILIZADOR QUE PRETENDE PROMOVER A EDITOR-----");
+        System.out.print("Username utilizador:");
+        usernameDest = sc.nextLine();
+        text = rmiinterface.privilegiosEditorRMIServer(username, password, usernameDest);
+        System.out.println("Server: "+text);
+        if(text.equals("accepted")){
+            System.out.println("Utilizador "+usernameDest+" promovido com sucesso!");
+            return;
+        }
+        else if(text.equals("wrongusername")){
+            System.out.println("Os seus dados nao correspondem a um utilizador ja registado.");
+            return;
+        }
+        else if(text.equals("wrongusernameDest")){
+            System.out.println("O utilizador que esta a tentar promover nao corresponde a um utilizador ja registado.");
+            return;
+        }
+        else if(text.equals("rejected")){
+            System.out.println("Nao tem permissao para esta acao.");
+            return;
+        }
+        System.out.println("Ocorreu alguma falha no sistema. Tente novamente.");
+    }
+
     
 }
