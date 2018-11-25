@@ -67,7 +67,7 @@ type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_
 (Será preciso indicar também o artista e o album?)
 
 
-PESQUISA POR ARTISTA: (devolve albuns que depois podem ser selecionados)
+PESQUISA ALBUM POR NOME DO ARTISTA: (devolve albuns que depois podem ser selecionados)
 cliente:
 type|search_artist;artist_name|Quim Barreiros;id|123456789;serverId|1;status|null;
 server:
@@ -76,7 +76,7 @@ type|search_artist;artist_name|Quim Barreiros;count|2;albums|album1+album2:id|12
 type|search_artist;artist_name|Quim Barreiros;id|123456789;status|empty; //nao existem albuns
 type|search_artist;artist_name|Quim Barreiros;id|123456789;status|notfound;
 
-PESQUISA POR ALBUM: (devolve o album procurado, caso exista, com o artista associado)
+PESQUISA ALBUM POR TITULO: (devolve o album procurado, caso exista, com o artista associado)
 cliente:
 type|search_album;album_name|OK Computer;id|123456789;serverId|1;status|null;
 server:
