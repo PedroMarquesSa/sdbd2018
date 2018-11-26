@@ -42,7 +42,12 @@ type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;s
 
 INTRODUZIR ARTISTA: //preciso do username para saber se é editor ou admin para poder alterar ou adicionar
 cliente:
-type|new_artist;username|nome;artist_name|Quim Barreiros;description|mensagem;birth_date|01.12.1998;id|123456789;serverId|1;status|null; //mensagem -> texto de descricao
+(musico sem grupo)
+type|new_artist;username|nome;artist_name|Quim Barreiros;grupo| ;description|mensagem;birth_date|01.12.1998;id|123456789;serverId|1;status|null; //mensagem -> texto de descricao
+(musico com grupo)
+type|new_artist;username|nome;artist_name|Thom Yorke;grupo|Radiohead;description|mensagem;birth_date|01.12.1998;id|123456789;serverId|1;status|null;
+(grupo que é o grupo)
+type|new_artist;username|nome;artist_name|Brockhampton;grupo|Brockhampton;description|mensagem;birth_date|01.12.1998;id|123456789;serverId|1;status|null;
 server:
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|accepted;
 type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|nopermission; //nao tem permissoes para adicionar
