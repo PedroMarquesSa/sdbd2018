@@ -50,7 +50,7 @@ type|new_artist;username|nome;artist_name|Quim Barreiros;id|123456789;status|rej
 
 INTRODUZIR ALBUM: 
 cliente:
-type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;description|descricao;id|123456789;serverId|1;status|null;
+type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;description|descricao;genre|Rock;releaseDate|03.10.2017;id|123456789;serverId|1;status|null;
 server:
 type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|accepted;
 type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|rejected; //ja existe
