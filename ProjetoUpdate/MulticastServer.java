@@ -213,7 +213,11 @@ class MulticastServerThread extends Thread {
                 break;
             case "new_album":
                 System.out.println("Adiciona album!!!");
-                temp = fich.addAlbum(this.map);
+                try {
+                    temp = funcoesBD.addAlbum(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
@@ -224,7 +228,7 @@ class MulticastServerThread extends Thread {
                 resposta = string2packet(temp);
                 break;
             case "search_artist":
-                System.out.println("procura album!!!");
+                System.out.println("procura artista!!!");
                 temp = fich.searchArtista(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
@@ -325,16 +329,22 @@ class Album implements Serializable {
     public String descricao;
     public String nome;
     public float ratingAVG;
+    public String genero;
+    public String dataLancamento;
     public ArrayList<Review> reviews;
     public ArrayList<Musica> musicas;
+    public String editora;
 
-    public Album(String artista, String descricao, String nome, float ratingAVG, ArrayList<Review> reviews, ArrayList<Musica> musicas) {
+    public Album(String artista, String descricao, String nome, float ratingAVG, ArrayList<Review> reviews, ArrayList<Musica> musicas, String genero,String dataLancamento, String editora) {
         Artista = artista;
         this.descricao = descricao;
         this.nome = nome;
         this.ratingAVG = ratingAVG;
         this.reviews = reviews;
         this.musicas = musicas;
+        this.genero = genero;
+        this.dataLancamento = dataLancamento;
+        this.editora = editora;
     }
 }
 
