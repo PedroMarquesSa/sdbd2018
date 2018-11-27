@@ -36,7 +36,7 @@ cliente:
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;serverId|1;status|null;
 server:
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;;status|accepted;
-type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;status|wrongusername; //caso nao exista o user que esta a tentar promover o outro
+type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;status|wrongusername; //caso nao exista o user que esta a tentar promover o outro -> não utilizado pois só se pode fazer isto depois de ter o login feito
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;status|wrongusernameDest; //caso nao exista o user a ser promovido
 type|promote;username|nome;password|pass;usernameDest|nomeDestino;id|123456789;status|rejected; //caso nao tenha permissao para isso
 
