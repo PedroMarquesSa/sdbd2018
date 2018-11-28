@@ -1,7 +1,11 @@
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class FuncoesBD {
@@ -395,18 +399,39 @@ public class FuncoesBD {
         Artista artista = new Artista(map.get("artist_name"), "", "");
         if(checkPermission(user)) { //pode escever
             if(checkAlbumArtista(album, artista)) { //se existir
-                PreparedStatement st = connection.prepareStatement("insert into review values(?, ?, ?, ?, ?, ?)");
+                int idAlbum = getIdAlbum(album, artista);
+                PreparedStatement st = connection.prepareStatement("insert into review values(?, ?, ?, ?, ?)");
                 st.setInt(1, Integer.parseInt(map.get("rating")));
                 st.setString(2, map.get("critic"));
                 st.setString(3, user.username);
-                st.setInt(4, getIdAlbum(album, artista));
+                st.setInt(4, idAlbum);
                 st.setString(5, user.username);
                 st.executeUpdate();
-                return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|accepted";
+                //ratingAVG
+                int countReview;
+                float sum = 0;
+                PreparedStatement stCount = connection.prepareStatement("select count(*) from review where album_idalbum = ?");
+                stCount.setInt(1, idAlbum);
+                ResultSet rsCount = stCount.executeQuery();
+                rsCount.next();
+                countReview = rsCount.getInt(1);
+                PreparedStatement stSum = connection.prepareStatement("select rating from review where album_idalbum = ?");
+                stSum.setInt(1, idAlbum);
+                ResultSet rsSum = stSum.executeQuery();
+                while(rsSum.next()) {
+                    sum += rsSum.getFloat(1);
+                }
+                if(countReview>0) {
+                    PreparedStatement stReview = connection.prepareStatement("update album set ratingavg = ? where idalbum = ?");
+                    stReview.setFloat(1, sum/(float)countReview);
+                    stReview.setInt(2, idAlbum);
+                    stReview.executeUpdate();
+                }
+                return "type|album_critic;username|"+user.username+";album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|accepted";
             } //caso nao exista o album a rever
-            return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|notfound";
+            return "type|album_critic;username|"+user.username+";album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|notfound";
         } else {// caso nao tenha permissao
-            return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|nopermission";
+            return "type|album_critic;username|"+user.username+";album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|nopermission";
         }
     }
 
@@ -471,6 +496,7 @@ public class FuncoesBD {
         ResultSet rs = st.executeQuery();
         ArrayList<String> artistas = new ArrayList<>();
         while(rs.next()) {
+            System.out.println("entrei aqui");
             artistas.add(rs.getString(1));
         }
         if(artistas.isEmpty()){ //caso nao exista nenhum album com esse nome
@@ -502,7 +528,7 @@ public class FuncoesBD {
                 todos= todos.concat(temp+"+");
             }
             todos = todos.substring(0, todos.length()-1);
-            return "type|search_album_by_title;artist_name|"+todos+";count|"+Integer.toString(albums.size())+";album_name|"+todos+";id|"+map.get("id")+";status|accepted;";
+            return "type|search_album_by_title;artist_name|"+map.get("artist_name")+";count|"+Integer.toString(albums.size())+";album_name|"+todos+";id|"+map.get("id")+";status|accepted;";
         } else {
             //caso nao exista
             return "type|search_album_by_artist;artist_name|"+map.get("artist_name")+";id|"+map.get("id")+";status|notfound;";
@@ -526,7 +552,7 @@ public class FuncoesBD {
             String musica = "";
             StringBuilder reviews = new StringBuilder();
             //adicionar musicas
-            PreparedStatement stMusicas = connection.prepareStatement("select nome from musica where album_idalbum = (select idalbum from album where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?)))");
+            PreparedStatement stMusicas = connection.prepareStatement("select nome from musica where album_idalbum = (select idalbum from album where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?))");
             stMusicas.setString(1, map.get("album_name"));
             stMusicas.setString(2, map.get("artist_name"));
             ResultSet rsMusicas = stMusicas.executeQuery();
@@ -564,10 +590,11 @@ public class FuncoesBD {
     }
 
     public String date2String(Object data) {
-        LocalDate date = (LocalDate) data;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return date.format(formatter);
+        System.out.println(data);
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(data);
     }
+
 
 }
 

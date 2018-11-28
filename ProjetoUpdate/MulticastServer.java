@@ -263,7 +263,11 @@ class MulticastServerThread extends Thread {
                 break;
             case "album_critic":
                 System.out.println("critica album!!!");
-                //temp = fich.writeReview(this.map);
+                try {
+                    temp = funcoesBD.writeReview(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
