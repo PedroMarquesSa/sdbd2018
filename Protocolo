@@ -65,13 +65,13 @@ type|new_album;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123
 
 INTRODUZIR MUSICA:
 cliente:
-type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;serverId|1;status|null;
+type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;lyrics|letraletraletra;id|123456789;serverId|1;status|null;
 server:
 type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|accepted;
 type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|rejected; //ja existe
 type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|nopermission;
-(Será preciso indicar também o artista e o album?)
-
+type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|noartist;
+type|new_music;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|Karma Police;id|123456789;status|noalbum;
 
 PESQUISA ALBUM POR NOME DO ARTISTA: (devolve albuns que depois podem ser selecionados)
 cliente:
@@ -109,6 +109,14 @@ type|album_critic;username|tintin;artist_name|Radiohead;album_name|OK Computer;c
 server:
 type|album_critic;username|tintin;artist_name|Radiohead;album_name|OK Computer;critic|string_com_a_critica;rating|10;id|123456789;status|nopermission;
 type|album_critic;username|tintin;artist_name|Radiohead;album_name|OK Computer;critic|string_com_a_critica;rating|10;id|123456789;status|notfound;
+
+CRIAR CONCERTO:
+cliente:
+type|create_concert;username!PedroSa;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;serverId|1;status|null;
+servidor:
+type|create_concert;username!PedroSa;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;serverId|1;status|rejected; //ja existe (local e data ja preenchidos)
+type|create_concert;username!PedroSa;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;serverId|1;status|accepted;
+(mudar, varias condicoes)
 
 UPLOAD DE FICHEIRO PARA ASSOCIAR A UMA MUSICA EXISTENTE (é preciso indicar album e artista?):
 type|upload;music|Monday;album|Telluric;artist|Matt Corby;file|file_path;id|123456789;serverId|1;status|rejected;
