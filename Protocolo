@@ -82,18 +82,18 @@ type|search_album_by_artist;artist_name|Quim Barreiros;count|2;albums|album1+alb
 type|search_album_by_artist;artist_name|Quim Barreiros;id|123456789;status|empty; //nao existem albuns
 type|search_album_by_artist;artist_name|Quim Barreiros;id|123456789;status|notfound;
 
-PESQUISA ALBUM POR TITULO: (devolve o album procurado, caso exista, com o artista associado)
+PESQUISA ALBUM POR TITULO: (devolve o(s) album procurado(s), caso exista, com o artista associado)
 cliente:
 type|search_album_by_title;album_name|OK Computer;id|123456789;serverId|1;status|null;
 server:
-type|search_album_by_title;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|accepted;
+type|search_album_by_title;artist_name|Radiohead,outroartista;album_name|OK Computer;id|123456789;status|accepted; //ATENCAO AO ARTISTA
 type|search_album_by_title;album_name|OK Computer;id|123456789;status|notfound; //nao existe album com esse nome
 
 CONSULTAR DETALHES ALBUM:
 cliente:
 type|album_details;artist_name|Radiohead;album_name|OK Computer;id|123456789;serverId|1;status|null;
 server:
-type|album_details;artist_name|Radiohead;album_name|OK Computer;description|descricao;ratingAVG|9.2;countMusic|3;music|musica1+musica2+musica3;countReview|2;reviews|7+descricao*10+descricao;id|123456789;status|accepted;
+type|album_details;artist_name|Radiohead;album_name|OK Computer;genre|Rock;adescription|descricao;ratingAVG|9.2;countMusic|3;music|musica1+musica2+musica3;countReview|2;reviews|7+descricao*10+descricao;id|123456789;status|accepted;
 type|album_details;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|notfound;
 
 CONSULTAR DETALHES ARTISTA:
