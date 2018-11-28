@@ -127,8 +127,7 @@ public class FuncoesBD {
     //ADD ARTISTA
     public String addArtista(HashMap<String, String> map) throws SQLException {
         String resposta = "\nnnn\n";
-        ArrayList<Album> albums = new ArrayList<>();
-        Artista artista = new Artista(map.get("artist_name"), map.get("description"), map.get("birth_date"), albums);
+        Artista artista = new Artista(map.get("artist_name"), map.get("description"), map.get("birth_date"));
         String grupo = map.get("grupo");
         User user = new User(map.get("username"), "null", "null", "null");
         //verificar se tem permissoes para adicionar
@@ -146,6 +145,7 @@ public class FuncoesBD {
             } else if(grupo.equals(artista.nome)) { //caso o artista a adicionar é um grupo
                 addGrupo(artista);
             } else { //caso o artista a adicionar faca parte de um grupo
+                addMusico(getIdArtista(artista));
                 addMusico2Grupo(artista, grupo);
             }
             System.out.println("\nInseri artista");
@@ -197,7 +197,7 @@ public class FuncoesBD {
     //ADD ALBUM
     public String addAlbum(HashMap<String, String> map) throws SQLException {
         ArrayList<Album> albums = new ArrayList<>();
-        Artista artista = new Artista(map.get("artist_name"), map.get("null"), map.get("null"), albums);
+        Artista artista = new Artista(map.get("artist_name"), map.get("null"), map.get("null"));
         //verificar se tem permissoes para adicionar
         User user = new User(map.get("username"), "null", "null", "null");
         if(!checkPermission(user)){
@@ -205,7 +205,7 @@ public class FuncoesBD {
         }
         ArrayList<Review> reviews = new ArrayList<>();
         ArrayList<Musica> musicas = new ArrayList<>();
-        Album album = new Album(map.get("artist_name"), map.get("description"), map.get("album_name"), (float)0, reviews, musicas, map.get("genre"), map.get("releaseDate"), map.get("recordlabel"));
+        Album album = new Album(map.get("artist_name"), map.get("description"), map.get("album_name"), (float)0, map.get("genre"), map.get("releaseDate"), map.get("recordlabel"));
 
         if (checkArtist(artista)) { //caso exista o artistA
             System.out.println("artista existe");
@@ -242,7 +242,7 @@ public class FuncoesBD {
                 }
                 //verificar recordLabel
                 PreparedStatement st2 = connection.prepareStatement("insert into editora values(?,?)");
-                st2.setString(1, album.genero);
+                st2.setString(1, album.editora);
                 st2.setInt(2, idAlbum);
                 st2.executeUpdate();
                 return "type|new_album;username|"+user.username+";artist_name|"+artista.nome+";album_name|"+album.nome+";id|"+map.get("id")+";status|accepted";
@@ -262,13 +262,13 @@ public class FuncoesBD {
     }
 
     public boolean checkAlbumArtista(Album album, Artista artista) throws SQLException {
-        int idTemp = getIdArtista(artista);
-        PreparedStatement st = connection.prepareStatement("select album.nome from album, artista where album.nome = ? and album.artista_idartista = ?");
+        PreparedStatement st = connection.prepareStatement("select idalbum from album, artista where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?)");
         st.setString(1, album.nome);
-        st.setInt(2, idTemp);
+        //System.out.println("\no album é: "+album.nome+"\n");
+        st.setString(2, artista.nome);
         ResultSet rs  = st.executeQuery();
         if(rs.next()) { //caso ja exista um album com o mesmo nome no artista;
-            System.out.println("\nesta aqui p album:\n"+rs.getString(1));
+            System.out.println("\nesta aqui o album:\n"+rs.getString(1));
             return true;
         } else {
             return false;
@@ -284,9 +284,6 @@ public class FuncoesBD {
         return rs.getInt("idartista");
     }
 
-//    public int getIdAlbum(Album album) {
-//        PreparedStatement st = connection.prepareStatement("select idalbum from album where ")
-//    }
 
     public boolean checkEditora(String editora) throws SQLException {
         PreparedStatement st = connection.prepareStatement("select * from editora where nome = ?");
@@ -325,6 +322,252 @@ public class FuncoesBD {
         PreparedStatement st = connection.prepareStatement("insert into grupo_artista values(?,?)");
         st.setString(1, grupo);
         st.setInt(2, getIdArtista(musico));
-        st.executeUpdate();
     }
+
+    public String addMusica(HashMap<String, String> map) throws SQLException {
+        ArrayList<Album> albums = new ArrayList<>();
+        Artista artista = new Artista(map.get("artist_name"), map.get("null"), map.get("null"));
+        //verificar se tem permissoes para adicionar
+        User user = new User(map.get("username"), "null", "null", "null");
+        if(!checkPermission(user)){
+            return "type|new_music;username|"+user.username+";artist_name|"+artista.nome+";album_name|"+map.get("album_name")+";music_name|"+map.get("music_name")+";id|"+map.get("id")+";status|nopermission";
+        }
+        ArrayList<Review> reviews = new ArrayList<>();
+        ArrayList<Musica> musicas = new ArrayList<>();
+        Album album = new Album(artista.nome, "", map.get("album_name"), (float) 0, "", "","");
+        Musica musica = new Musica(map.get("music_name"), artista.nome, album.nome, map.get("lyrics"));
+        //verificar se o artista existe
+            if(!checkArtist(artista)) { //caso nao exista o artista
+                System.out.println("\nnao existe o artista\n");
+                return "type|new_music;username|"+user.username+";artist_name|"+artista.nome+";album_name|"+map.get("album_name")+";music_name|"+map.get("music_name")+";id|"+map.get("id")+";status|noartist";
+            } //caso exista o artista
+            if(!checkAlbumArtista(album, artista)) { //caso o album nao exista
+                System.out.println("\nnao existe o album\n");
+                return "type|new_music;username|" + user.username + ";artist_name|" + artista.nome + ";album_name|" + map.get("album_name") + ";music_name|" + map.get("music_name") + ";id|" + map.get("id") + ";status|noalbum";
+            } else {//caso o album exista
+                if(checkMusicAlbumArtista(musica, album, artista)) { //caso ja exista a musica
+                    System.out.println("ja existe a musica");
+                    return "type|new_music;username|" + user.username + ";artist_name|" + artista.nome + ";album_name|" + map.get("album_name") + ";music_name|" + map.get("music_name") + ";id|" + map.get("id") + ";status|rejected";
+                } else{
+                    //adicionei na tabela musica
+                    System.out.println("consegui inserir!! props");
+                    PreparedStatement st = connection.prepareStatement("insert into musica values(?,default,?) returning idmusica");
+                    st.setString(1, musica.nome);
+                    st.setInt(2, getIdAlbum(album, artista));
+                    ResultSet rs = st.executeQuery();
+                    //adicionei na tabela letra
+                    rs.next();
+                    int idMusica = rs.getInt(1);
+                    PreparedStatement st1 = connection.prepareStatement("insert into letra values(?, ?)");
+                    st1.setString(1, musica.letra);
+                    st1.setInt(2, idMusica);
+                    return "type|new_music;username|" + user.username + ";artist_name|" + artista.nome + ";album_name|" + map.get("album_name") + ";music_name|" + map.get("music_name") + ";id|" + map.get("id") + ";status|accepted";
+                }
+            }
+        }
+
+        public int getIdAlbum(Album album, Artista artista) throws SQLException {
+            PreparedStatement st = connection.prepareStatement("select idalbum from album, artista where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?)");
+            st.setString(1, album.nome);
+            st.setString(2, artista.nome);
+            ResultSet rs = st.executeQuery();
+            rs.next();
+            return rs.getInt("idalbum");
+        }
+        public boolean checkMusicAlbumArtista(Musica musica, Album album, Artista artista) throws SQLException {
+            PreparedStatement st = connection.prepareStatement("select * from musica, album where musica.nome = ? and album_idalbum = (" +
+                    "select idalbum from album where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?))");
+            st.setString(1, musica.nome);
+            st.setString(2, album.nome);
+            st.setString(3, artista.nome);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    public String writeReview(HashMap<String, String> map) throws SQLException {
+        User user = new User(map.get("username"), "", "", ""); //user que quer escrever
+        ArrayList<Album> albuns = new ArrayList<>();
+        Album album = new Album(map.get("artist_name"), "", map.get("album_name"), 0, "", "", "");
+        Artista artista = new Artista(map.get("artist_name"), "", "");
+        if(checkPermission(user)) { //pode escever
+            if(checkAlbumArtista(album, artista)) { //se existir
+                PreparedStatement st = connection.prepareStatement("insert into review values(?, ?, ?, ?, ?, ?)");
+                st.setInt(1, Integer.parseInt(map.get("rating")));
+                st.setString(2, map.get("critic"));
+                st.setString(3, user.username);
+                st.setInt(4, getIdAlbum(album, artista));
+                st.setString(5, user.username);
+                st.executeUpdate();
+                return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|accepted";
+            } //caso nao exista o album a rever
+            return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|notfound";
+        } else {// caso nao tenha permissao
+            return "type|album_critic;username|"+user.username+"album_name|"+map.get("album_name")+";critic|"+map.get("critic")+";rating|"+map.get("rating")+";id|"+map.get("id")+";status|nopermission";
+        }
+    }
+
+    public String addConcert(HashMap<String, String> map) throws SQLException {
+        User user = new User(map.get("username"), "", "", ""); //user que quer escrever
+        String temp = map.get("artist_name");
+        String[] artista = temp.split(",");
+
+        System.out.println("artistas no concerto: "+map.get("artist_name"));
+        if(!checkPermission(user)) {
+            //nao pode escrever
+            return "type|create_concert;username|"+user.username+";artist_name|"+map.get("artist_name")+";concert_name|"+map.get("concert_name")+";date|"+map.get("date")+";local|"+map.get("local")+";id|"+map.get("id")+";status|nopermission;";
+        }
+        //tem permissoes
+        //ter todos os artistas para verificar
+        ArrayList<Artista> artistas = new ArrayList<>();
+        for(int i=0; i<artista.length; i++) {
+            artistas.add(new Artista(artista[i], "", ""));
+            System.out.println("\nOs artistas para o concerto sao:"+artistas.get(i).nome+"\n");
+        }
+        int len = 0; //para ver se todos la estao
+        for(Artista tempArtista:artistas) {
+            if(checkArtist(tempArtista))
+                len++;
+        }
+        if(len == artistas.size()) { //os artistas existem, pode adicionar
+            PreparedStatement st = connection.prepareStatement("insert into concerto values(?, ?, default, ?) returning idconcerto");
+            st.setObject(1, string2Date(map.get("date")));
+            st.setString(2, map.get("local"));
+            st.setString(3, map.get("concert_name"));
+
+            try {
+                ResultSet rs = st.executeQuery();
+                rs.next();
+                int idconcerto = rs.getInt(1);
+                //inserir na outra tabela
+                for(Artista auxArtista:artistas) {
+                    PreparedStatement st1 = connection.prepareStatement("insert into artista_concerto values(?,?)");
+                    st1.setInt(1, getIdArtista(auxArtista));
+                    st1.setInt(2, idconcerto);
+                    st1.executeUpdate();
+                }
+                System.out.println("deu para inserir concerto");
+                return "type|create_concert;username|"+user.username+";artist_name|"+map.get("artist_name")+";concert_name|"+map.get("concert_name")+";date|"+map.get("date")+";local|"+map.get("local")+";id|"+map.get("id")+";status|accepted;";
+            } catch (SQLException e) {
+                if(e.getSQLState().equals("23505")) {
+                    System.out.println("ja existe um concerto ai");
+                    return "type|create_concert;username|"+user.username+";artist_name|"+map.get("artist_name")+";concert_name|"+map.get("concert_name")+";date|"+map.get("date")+";local|"+map.get("local")+";id|"+map.get("id")+";status|reject;";
+                }
+            }
+        } else { //nao existem todos os artistas
+            return "type|create_concert;username|"+user.username+";artist_name|"+map.get("artist_name")+";concert_name|"+map.get("concert_name")+";date|"+map.get("date")+";local|"+map.get("local")+";id|"+map.get("id")+";status|noartists;";
+        }
+        System.out.println("nao sei o que se passou para aqui chegarmos #dunno");
+        return "type|create_concert;username|"+user.username+";artist_name|"+map.get("artist_name")+";concert_name|"+map.get("concert_name")+";date|"+map.get("date")+";local|"+map.get("local")+";id|"+map.get("id")+";status|reject;";
+    }
+
+    public String searchAlbumTitle(HashMap<String, String> map) throws SQLException {
+        Album album = new Album(map.get(""), "", map.get("album_name"), 0, "", "", "");
+        PreparedStatement st = connection.prepareStatement("select nome from artista where idartista in (select artista_idartista from album where nome = ?)");
+        st.setString(1, album.nome);
+        ResultSet rs = st.executeQuery();
+        ArrayList<String> artistas = new ArrayList<>();
+        while(rs.next()) {
+            artistas.add(rs.getString(1));
+        }
+        if(artistas.isEmpty()){ //caso nao exista nenhum album com esse nome
+            return "type|search_album_by_title;album_name|"+map.get("album_name")+";id|"+map.get("id")+";status|notfound";
+        }
+        String todos = "";
+        for(String temp:artistas) {
+            todos = todos.concat(temp+",");
+        }
+        todos = todos.substring(0, todos.length()-1);
+        return "type|search_album_by_title;artist_name|"+todos+";album_name|"+map.get("album_name")+";id|"+map.get("id")+";status|accepted;";
+    }
+
+    public String searchAlbumArtista(HashMap<String, String> map) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("select nome from album where artista_idartista in (select idartista from artista where nome = ?)");
+        st.setString(1, map.get("artist_name"));
+        ResultSet rs = st.executeQuery();
+        ArrayList<String> albums = new ArrayList<>();
+        Artista artista = new Artista(map.get("artist_name"), "", "");
+        if(checkArtist(artista)) { //caso o artista exista
+            while(rs.next()) {
+                albums.add(rs.getString(1));
+            }
+            if(albums.isEmpty()){ //caso nao exista nenhum album com esse nome
+                return "type|search_album_by_artist;artist_name|"+map.get("artist_name")+";id|"+map.get("id")+";status|empty;";
+            }
+            String todos = "";
+            for(String temp:albums) {
+                todos= todos.concat(temp+"+");
+            }
+            todos = todos.substring(0, todos.length()-1);
+            return "type|search_album_by_title;artist_name|"+todos+";count|"+Integer.toString(albums.size())+";album_name|"+todos+";id|"+map.get("id")+";status|accepted;";
+        } else {
+            //caso nao exista
+            return "type|search_album_by_artist;artist_name|"+map.get("artist_name")+";id|"+map.get("id")+";status|notfound;";
+        }
+    }
+
+    public String detalhesAlbum(HashMap<String, String> map) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("select descricao, ratingavg, genero, data from album where nome = ? and artista_idartista = (select idartista from artista where artista.nome = ?)");
+        st.setString(1, map.get("album_name"));
+        st.setString(2, map.get("artist_name"));
+        ResultSet rs = st.executeQuery();
+        int musicaCount = 0;
+        int reviewCount = 0;
+        if(rs.next()) { //caso encontre o album
+            String descricao = rs.getString("descricao");
+            String ratingAVG = Float.toString(rs.getFloat("ratingavg"));
+            String genero = rs.getString("genero");
+            String data = date2String(rs.getObject("data"));
+            float rating = rs.getFloat("ratingAVG");
+            StringBuilder musicas = new StringBuilder();
+            String musica = "";
+            StringBuilder reviews = new StringBuilder();
+            //adicionar musicas
+            PreparedStatement stMusicas = connection.prepareStatement("select nome from musica where album_idalbum = (select idalbum from album where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?)))");
+            stMusicas.setString(1, map.get("album_name"));
+            stMusicas.setString(2, map.get("artist_name"));
+            ResultSet rsMusicas = stMusicas.executeQuery();
+            while(rsMusicas.next()) {
+                musica = rsMusicas.getString(1);
+                musicas.append(musica).append("+");
+                musicaCount++;
+            }
+            if(musicas.length()!=0)
+                musicas.deleteCharAt(musicas.length()-1);
+            //adicionar reviews
+            PreparedStatement stReviews = connection.prepareStatement("select rating, descricao from review where album_idalbum = (select idalbum from album where album.nome = ? and album.artista_idartista = (select idartista from artista where nome = ?)))");
+            stReviews.setString(1, map.get("album_name"));
+            stReviews.setString(2, map.get("artist_name"));
+            ResultSet rsReviews = stMusicas.executeQuery();
+            while(rsReviews.next()) {
+                reviews.append(rsReviews.getString("rating")).append("+").append(rsReviews.getString("descricao")).append("*");
+                reviewCount++;
+            }
+            if(reviews.length()!=0)
+                reviews.deleteCharAt(reviews.length()-1);
+            //criar a string a enviar
+            return "type|search_album;artist_name|" + map.get("artist_name") + ";album_name|" + map.get("album_name") +
+                    ";description|"+descricao+
+                    ";ratingAVG|"+Integer.toString(Math.round(rating))+
+                    ";countMusic|"+musicaCount+
+                    ";music|"+musicas+
+                    ";countReview|"+reviewCount+
+                    ";reviews|"+reviews+
+                    ";id|" + map.get("id") + ";status|accepted;";
+        } else {
+            System.out.println("nao econtrei o album");
+            return "type|search_album;album_name|" + map.get("album_name") + ";id|" + map.get("id") + ";status|notfound";
+        }
+    }
+
+    public String date2String(Object data) {
+        LocalDate date = (LocalDate) data;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return date.format(formatter);
+    }
+
 }
+
