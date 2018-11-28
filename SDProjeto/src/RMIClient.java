@@ -493,7 +493,7 @@ public class RMIClient {
         int rating;
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\n-----ESCREVER NOVA MUSICA-----");
+        System.out.println("\n-----ESCREVER CRITICA A UM ALBUM-----");
         System.out.print("Nome do artista:");
         artist_name = sc.nextLine();
         System.out.print("Nome do album:");
