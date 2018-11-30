@@ -195,14 +195,16 @@ EDITAR MUSICA:
 cliente: 
 type|music_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;serverId|1;status|null;
 (caso fique pending): 
-type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|;compositores|compositor1;id|123456789;status|null;
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|;compositor_name|compositor1;id|123456789;status|null;
 server:
-type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|letra;compositores|compositor1,compositor2;id|123456789;status|pending;
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|letra;compositor_name|compositor1,compositor2;id|123456789;status|pending;
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|notfound;
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|nopermission;
 (caso o user seja aceite)
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|accepted;
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|notfound;
 
+(por implementar)
 EDITAR PLAYLIST:
 cliente:
 type|playlist_edit;username|nome;playlist_name|nome;id|123456789;serverId|1;status|null;
