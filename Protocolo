@@ -136,11 +136,11 @@ type|upload;music|Monday;album|Telluric;artist|Matt Corby;file|file_path;id|1234
 (adiciona a musica ja existente com artistas que têm de estar criados)
 ADICIONAR COMPOSITORES:
 cliente:
-type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;serverId|1;status|null;
+type|add_compositor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;serverId|1;status|null;
 server:
-type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|accepted;
-type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|notfound;
-type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|nopermission;
+type|add_compositor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|accepted;
+type|add_compositor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|notfound;
+type|add_compositor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|nopermission;
 
 ADICIONAR PLAYLIST:
 cliente:
