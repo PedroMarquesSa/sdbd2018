@@ -17,11 +17,11 @@ import java.util.Random;
  * @author Renato Matos
  */
 public class RMIServer extends UnicastRemoteObject implements RMIInterface{
-    
+
     public RMIServer() throws RemoteException{
         super();
     }
-    
+
     @Override
     public String loginRMIServer(String username, String password) throws RemoteException{
         int serverID = 1;
@@ -32,28 +32,28 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         System.out.println("\nLogin info received: username|"+username+", password|"+password);
         String protocol = "type|login;username|"+username+";password|"+password+";id|"+id+";serverId|"+serverID+";status|null";
         System.out.println(protocol+"\n");
-        
+
         MulticastClient client = new MulticastClient();
         client.start();
 
         MulticastUser user = new MulticastUser(protocol);
         user.start();
-        
+
         //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
         String respostaClient = null;
         try{
-        Thread.sleep(500);
-        respostaClient = client.getResposta();
-        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
         }catch(Exception e){}
-        
+
         String[] parts = respostaClient.split(";");
         //System.out.println("parts[4]= "+parts[4]);
-        String[] parts2 = parts[4].split("\\|");
+        String[] parts2 = parts[5].split("\\|");
         System.out.println("parts2[1]= "+parts2[1]);
         return parts2[1];
     }
-    
+
     @Override
     public String registarRMIServer(String username, String password) throws RemoteException{
         int serverID = 1;
@@ -62,7 +62,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         int id = rand.nextInt(999999999) + 1;
 
         String protocol = "type|register;username|"+username+";password|"+password+";id|"+id+";serverId|"+serverID+";status|null";
-        
+
         System.out.println(protocol+"\n");
 
         MulticastClient client = new MulticastClient();
@@ -74,9 +74,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
         String respostaClient = null;
         try{
-        Thread.sleep(500);
-        respostaClient = client.getResposta();
-        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
         }catch(Exception e){}
         String[] parts = respostaClient.split(";");
         //System.out.println("parts[4]= "+parts[4]);
@@ -86,7 +86,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
 
         return parts2[1];
     }
-    
+
     @Override
     public String privilegiosEditorRMIServer(String username, String password, String usernameDest) throws RemoteException{
         int serverID = 1;
@@ -95,7 +95,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         int id = rand.nextInt(999999999) + 1;
 
         String protocol = "type|promote;username|"+username+";password|"+password+";usernameDest|"+usernameDest+";id|"+id+";serverId|"+serverID+";status|null";
-        
+
         System.out.println(protocol+"\n");
 
         MulticastClient client = new MulticastClient();
@@ -107,9 +107,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         //Para que nao receba a mensagem enviada por ele proprio pelo brodcast
         String respostaClient = null;
         try{
-        Thread.sleep(500);
-        respostaClient = client.getResposta();
-        System.out.println("RESPOSTA CLIENT: "+respostaClient);
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
         }catch(Exception e){}
         String[] parts = respostaClient.split(";");
         //System.out.println("parts[4]= "+parts[4]);
@@ -121,14 +121,21 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     }
 
     @Override
-    public String introduzirArtistaRMIServer(String username,  String artist_name, String description, String birth_date) throws RemoteException{
-        int serverID = 1;
-
+    public String introduzirArtistaRMIServer(String username,  String artist_name, String description, String birth_date, String[] grupos) throws RemoteException{
+        int serverID = 1, i;
+        String gruposString = "";
         Random rand = new Random();
         int id = rand.nextInt(999999999) + 1;
 
-        String protocol = "type|new_artist;username|"+username+";artist_name|"+artist_name+";description|"+description+";birth_date|"+birth_date+";id|"+id+";serverId|"+serverID+";status|null";
-    
+        // o artista pode ter mais que um grupo
+
+        for(i=0; i<grupos.length - 1; i++){
+            gruposString += grupos[i] + ",";
+        }
+        gruposString += grupos[i];
+
+        String protocol = "type|new_artist;username|"+username+";artist_name|"+artist_name+";grupo|"+gruposString+";description|"+description+";birth_date|"+birth_date+";id|"+id+";serverId|"+serverID+";status|null";
+
         System.out.println(protocol+"\n");
 
         MulticastClient client = new MulticastClient();
@@ -153,14 +160,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     }
 
     @Override
-    public String introduzirAlbumRMIServer(String username,  String artist_name, String album_name, String description) throws RemoteException{
+    public String introduzirAlbumRMIServer(String username,  String artist_name, String album_name, String description, String genero, String releaseDate, String recordlabel) throws RemoteException{
         int serverID = 1;
 
         Random rand = new Random();
         int id = rand.nextInt(999999999) + 1;
 
-        String protocol = "type|new_album;username|"+username+";artist_name|"+artist_name+";album_name|"+album_name+";description|"+description+";id|"+id+";serverId|"+serverID+";status|null";
-    
+        String protocol = "type|new_album;username|"+username+";artist_name|"+artist_name+";album_name|"+album_name+";description|"+description+";genre|"+genero+"releaseDate|"+releaseDate+"recordlabel|"+recordlabel+";id|"+id+";serverId|"+serverID+";status|null";
+
         System.out.println(protocol+"\n");
 
         MulticastClient client = new MulticastClient();
@@ -242,13 +249,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         return respostaClient;
     }
 
-     @Override
+    @Override
     public String pesquisarAlbumPorTituloRMIServer(String username, String album_name) throws RemoteException{
         int serverID = 1;
 
         Random rand = new Random();
         int id = rand.nextInt(999999999) + 1;
-        
+
         String protocol = "type|search_album_by_title;album_name|"+album_name+";id|"+id+";serverId|"+serverID+";status|null";
         System.out.println(protocol+"\n");
 
@@ -270,12 +277,41 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     }
 
     @Override
+    public String enviarParaMulticast(String protocol) throws RemoteException{
+        int serverID = 1;
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
+        System.out.println(protocol+"\n");
+
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        protocol += ";id|"+id+";serverId|"+serverID+";status|null";
+
+        MulticastUser user = new MulticastUser(protocol);
+        user.start();
+
+        //Para que nao receba a mensagem enviada por ele proprio pelo broadcast
+        String respostaClient = null;
+        try{
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+
+        return respostaClient;
+    }
+
+
+    @Override
     public Boolean ping(){
         return true;
     }
 
     public static void main(String args[]) throws RemoteException{
-        connect();   
+        connect();
     }
 
     public static void connect() throws RemoteException{
@@ -285,7 +321,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
             reg = LocateRegistry.createRegistry(7000);
             rmiinterface = (RMIInterface) reg.lookup("rmiserver");
             reg.rebind("rmiserver", new RMIServer());
-        //Nao ha nada ligado ao registry 7000. Este servidor torna-se no servidor primario   
+            //Nao ha nada ligado ao registry 7000. Este servidor torna-se no servidor primario
         }catch (java.rmi.NotBoundException e) {
             System.out.println(e);
             try{
@@ -295,7 +331,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
             }catch (Exception e2) {
                 //System.out.println(e);
             }
-        //Ja ha algo ligado ao registry 7000. Este servidor torna-se no servidor secundario
+            //Ja ha algo ligado ao registry 7000. Este servidor torna-se no servidor secundario
         }catch(java.rmi.server.ExportException e){
             //System.out.println(e);
             System.out.println("Ja existe um servidor ligado ao registry 7000!");
@@ -307,11 +343,11 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                 boolean trueOrFalse = true;
                 while(trueOrFalse){
                     try{
-                    //Intervalo de tempo entre cada ping
-                    Thread.sleep(5000); //deveria ser com currentTimeMillis()?
-                    if(rmiinterface2.ping() == true){
-                        System.out.println("Ping!");
-                    }
+                        //Intervalo de tempo entre cada ping
+                        Thread.sleep(5000); //deveria ser com currentTimeMillis()?
+                        if(rmiinterface2.ping() == true){
+                            System.out.println("Ping!");
+                        }
                     }catch(Exception e3){
                         //System.out.println(e3);
                         pingsNaoCorrespondidos++;
@@ -333,7 +369,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
     static class MulticastClient extends Thread{
         private String MULTICAST_ADDRESS = "224.0.227.1";
         private int PORT = 4321;
-        
+
         private String resposta;
 
         public void setResposta(String message) {
@@ -343,7 +379,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         public String getResposta(){
             return resposta;
         }
-        
+
         public void run() {
             MulticastSocket socket = null;
             try {
@@ -418,14 +454,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
         try{
             System.out.println("A Escuta no Porto 6000");
             ServerSocket listenSocket = new ServerSocket(tcpServerPort);
-            System.out.println("LISTEN SOCKET="+listenSocket);               
+            System.out.println("LISTEN SOCKET="+listenSocket);
         }catch(IOException e){
             System.out.println("Listen:" + e.getMessage());
         }
         Socket s = null;
         //String tcpServerAddress = "192.168.1.198";
         String tcpServerAddress = "10.16.0.71";
-        
+
         try {
             // 1o passo
             s = new Socket(tcpServerAddress, tcpServerPort);
@@ -480,8 +516,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                 System.out.println("CLIENT_SOCKET (created at accept())="+clientSocket);
                 DataInputStream in;
                 DataOutputStream out;
-                        
-                try{                            
+
+                try{
                     in = new DataInputStream(clientSocket.getInputStream());
                     out = new DataOutputStream(clientSocket.getOutputStream());
                     String resposta;
@@ -501,7 +537,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface{
                     System.out.println("Connection:" + e.getMessage());
                 }
             }
-        
+
         }catch(IOException e){
             System.out.println("Listen:" + e.getMessage());
         }

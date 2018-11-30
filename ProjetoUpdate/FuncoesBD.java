@@ -143,7 +143,7 @@ public class FuncoesBD {
         User user = new User(map.get("username"), "null", "null", "null");
         //verificar se tem permissoes para adicionar
         if (!checkPermission(user)) {
-            return "type|new_artist;username|" + map.get("username") + "artist_name|" + artista.nome + ";id|" + map.get("id") + ";status|nopermission";
+            return "type|new_artist;username|" + map.get("username") + ";artist_name|" + artista.nome + ";id|" + map.get("id") + ";status|nopermission";
         }
         if (!checkArtist(artista)) {
             PreparedStatement st = connection.prepareStatement("insert into artista values (?,?,default,?)");
@@ -165,7 +165,7 @@ public class FuncoesBD {
         } else {
             // Duplicate entry
             System.out.println("\nja existe o artista!!");
-            resposta = "type|new_artist;username|" + map.get("username") + "artist_name|" + artista.nome + ";id|" + map.get("id") + ";status|rejected";
+            resposta = "type|new_artist;username|" + map.get("username") + ";artist_name|" + artista.nome + ";id|" + map.get("id") + ";status|rejected";
             return resposta;
         }
     }
