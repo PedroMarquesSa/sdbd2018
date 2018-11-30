@@ -261,6 +261,26 @@ class MulticastServerThread extends Thread {
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
+            case "artist_details":
+                System.out.println("detalhes artista!!!");
+                try {
+                    temp = funcoesBD.detalhesArtista(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "music_details":
+                System.out.println("detalhes musica!!!");
+                try {
+                    temp = funcoesBD.detalhesMusica(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
             case "album_critic":
                 System.out.println("critica album!!!");
                 try {
@@ -275,6 +295,86 @@ class MulticastServerThread extends Thread {
                 System.out.println("cria concerto!!!");
                 try {
                     temp = funcoesBD.addConcert(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "add_compositor":
+                System.out.println("adiciona compositores!!!");
+                try {
+                    temp = funcoesBD.addCompositores(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "new_playlist":
+                System.out.println("cria playlist!!!");
+                try {
+                    temp = funcoesBD.addPlaylist(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "artist_edit":
+                System.out.println("edita artista!!!");
+                try {
+                    temp = funcoesBD.editArtista(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "album_edit":
+                System.out.println("edita album!!!");
+                try {
+                    temp = funcoesBD.editAlbum(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "music_edit":
+                System.out.println("edita musica!!!");
+                try {
+                    temp = funcoesBD.editMusica(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "delete_artist":
+                System.out.println("apaga artista!!!");
+                try {
+                    temp = funcoesBD.deleteArtista(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "delete_album":
+                System.out.println("apaga album!!!");
+                try {
+                    temp = funcoesBD.deleteAlbum(this.map);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(temp);
+                resposta = string2packet(temp);
+                break;
+            case "delete_music":
+                System.out.println("apaga musica!!!");
+                try {
+                    temp = funcoesBD.deleteMusica(this.map);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -345,14 +445,6 @@ class User implements Serializable {
 
 //Classes Musica (EM ARVORE, hierarquico) !!!!!!!!!
 
-//class com tudo, ou seja, class geral, apenas uma!!!
-class Biblioteca implements Serializable {
-    public ArrayList<Artista> artistas;
-
-    public Biblioteca() {
-        this.artistas = new ArrayList<>();
-    }
-}
 
 class Artista implements Serializable {
     public String nome;
