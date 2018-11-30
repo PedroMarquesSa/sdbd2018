@@ -20,7 +20,7 @@ LOGIN:
 cliente:
 type|login;username|tintin;password|unicorn;id|123456789;serverId|1;status|null;
 server:
-type|login;username|tintin;password|unicorn;id|123456789;status|accepted;
+type|login;username|tintin;password|unicorn;what|editor;id|123456789;status|accepted;
 type|login;username|tintin;password|unicorn;id|123456789;status|wrongpassword;
 type|login;username|tintin;password|unicorn;id|123456789;status|wrongusername;
 
@@ -89,6 +89,13 @@ server:
 type|search_album_by_title;artist_name|Radiohead,outroartista;album_name|OK Computer;id|123456789;status|accepted; //ATENCAO AO ARTISTA
 type|search_album_by_title;album_name|OK Computer;id|123456789;status|notfound; //nao existe album com esse nome
 
+CONSULTAR DETALHES MUSICA:
+cliente:
+type|music_details;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;serverId|1;status|null;
+server:
+type|music_details;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|letra;compositores|compositor1,compositor2;id|123456789;status|accepted;
+type|music_details;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|notfound;
+
 CONSULTAR DETALHES ALBUM:
 cliente:
 type|album_details;artist_name|Radiohead;album_name|OK Computer;id|123456789;serverId|1;status|null;
@@ -102,9 +109,6 @@ type|artist_details;artist_name|Quim Barreiros;id|123456789;serverId|1;status|nu
 server:
 type|artist_details;artist_name|Quim Barreiros;id|123456789;status|notfound;
 type|artist_details;artist_name|Quim Barreiros;bibliografia|random;count|2;albums|album1+album2;birth_date|11.11.1111;id|123456789;status|accepted;
-
-EDITAR DETALHES ALBUM (talvez dar essa opcao quando consultados os detalhes?)
-type|new_album_details;album_name|OK Computer;details|string_com_os_detalhes;id|123456789;serverId|1;status|rejected;
 
 ESCREVER CRITICA SOBRE UM ALBUM (apenas albuns ja adicionados):
 cliente:
@@ -122,9 +126,87 @@ type|create_concert;username|PedroSa;artist_name|artista1,artista2,artista3;conc
 type|create_concert;username|PedroSa;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;status|accepted;
 type|create_concert;username|PedroSa;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;status|noartists;
 
-(mudar, varias condicoes)
-
+(NAO IMPLEMENTADO)
 UPLOAD DE FICHEIRO PARA ASSOCIAR A UMA MUSICA EXISTENTE (é preciso indicar album e artista?):
 type|upload;music|Monday;album|Telluric;artist|Matt Corby;file|file_path;id|123456789;serverId|1;status|rejected;
 
-PARTILHAR UM FICHEIRO MUSICAL E PERMITIR O RESPETIVO DOWNLOAD?
+<=========================================================>
+<=========================================================>
+
+(adiciona a musica ja existente com artistas que têm de estar criados)
+ADICIONAR COMPOSITORES:
+cliente:
+type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;serverId|1;status|null;
+server:
+type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|accepted;
+type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|notfound;
+type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|nopermission;
+
+ADICIONAR PLAYLIST:
+cliente:
+type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;serverId|1;status|null; //public _> yes or no
+server:
+type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;status|accepted;
+type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;status|nopermission;
+type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;status|rejected; (ja existe o nome)
+
+CONSULTAR PLAYLIST: (ATENCAO-> preciso do username!!!!)
+cliente:
+type|playlist_details;username|nome;playlist_name|nome;id|123456789;serverId|1;status|null;
+server:
+type|playlist_details;username|nome;playlist_name|nome;music|artista,album,musica+artista2,album2,musica2;id|123456789;status|accepted;
+type|playlist_details;username|nome;playlist_name|nome;id|123456789;status|notfound;
+type|playlist_details;username|nome;playlist_name|nome;id|123456789;status|nopermission; (caso seja privado e nao seja quem editou)
+
+####ATENCAO-> status = pending significa que pode aterar e entao é enviad a informação toda####
+
+EDITAR ARTISTA:
+cliente:
+type|artist_edit;username|nome;artist_name|Quim Barreiros;id|123456789;serverId|1;status|null;
+(caso dê accept)
+type|artist_edit;username|nome;artist_name|Quim Barreiros;bibliografia|;birth_date|11.11.2222;id|123456789;serverId|1;status|null; (caso nao altere algum campo, fica a branco)
+server:
+type|artist_edit;artist_name|Quim Barreiros;bibliografia|random;count|2;albums|album1+album2;birth_date|11.11.1111;id|123456789;status|pending; (detalhes como no details, se quiseres podes aproveitar o codigo para mostrar)
+type|artist_edit;artist_name|Quim Barreiros;id|123456789;status|notfound;
+type|artist_edit;artist_name|Quim Barreiros;id|123456789;status|nopermission;
+(caso o user seja aceite)
+type|artist_edit;artist_name|Quim Barreiros;id|123456789;status|accepted;
+
+EDITAR ALBUM:
+cliente:
+type|album_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;serverId|1;status|null;
+(caso dê accept)
+type|album_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;genre|Rock;release_date|11.00.1111;description|descricao;id|123456789;serverId|1;status|null;
+server:
+type|album_edit;artist_name|Radiohead;album_name|OK Computer;genre|Rock;release_date|11.00.1111;description|descricao;ratingAVG|9.2;countMusic|3;music|musica1+musica2+musica3;countReview|2;reviews|7+descricao*10+descricao;id|123456789;status|pending;
+type|album_edit;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|notfound;
+type|album_edit;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|nopermission;
+(caso o user seja aceite)
+type|album_edit;artist_name|Radiohead;album_name|OK Computer;id|123456789;status|accepted;
+
+EDITAR MUSICA:
+cliente:
+type|music_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;serverId|1;status|null;
+(caso dê accept)
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|;compositores|compositor1;id|123456789;status|null;
+server:
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|letra;compositores|compositor1,compositor2;id|123456789;status|pending;
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|notfound;
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|nopermission;
+(caso o user seja aceite)
+type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|accepted;
+
+EDITAR PLAYLIST:
+
+
+EDITAR CONCERTO:
+
+APAGAR ARTISTA:
+
+APAGAR ALBUM:
+
+APAGAR MUSICA:
+
+APAGAR PLAYLIST:
+
+APAGAR CONCERTO:
