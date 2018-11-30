@@ -138,9 +138,9 @@ ADICIONAR COMPOSITORES:
 cliente:
 type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;serverId|1;status|null;
 server:
-type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|accepted;
-type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|notfound;
-type|add_compostor;username|nome;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|nopermission;
+type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|accepted;
+type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|notfound;
+type|add_compostor;artist_name|artista1;album_name|OK Computer;music_name|Karma Police;compositor_name|compositor1,compositor2,compositor3;id|123456789;status|nopermission;
 
 ADICIONAR PLAYLIST:
 cliente:
