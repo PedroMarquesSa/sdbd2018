@@ -150,6 +150,13 @@ type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;statu
 type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;status|nopermission;
 type|new_playlist;username|nome;public|yes;playlist_name|nome;id|123456789;status|rejected; (ja existe o nome)
 
+(POR IMPLEMENTAR)
+CONSULTAR CONCERTO:
+cliente:
+type|create_concert;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;status|nopermission;
+server:
+type|create_concert;artist_name|artista1,artista2,artista3;concert_name|nomeconcerto;date|20.06.2019;local|rua4;id|123456789;status|nopermission;
+
 CONSULTAR PLAYLIST: (ATENCAO-> preciso do username!!!!)
 cliente:
 type|playlist_details;username|nome;playlist_name|nome;id|123456789;serverId|1;status|null;
@@ -163,7 +170,7 @@ type|playlist_details;username|nome;playlist_name|nome;id|123456789;status|noper
 EDITAR ARTISTA:
 cliente:
 type|artist_edit;username|nome;artist_name|Quim Barreiros;id|123456789;serverId|1;status|null;
-(caso dê accept)
+(caso fique pending):
 type|artist_edit;username|nome;artist_name|Quim Barreiros;bibliografia|;birth_date|11.11.2222;id|123456789;serverId|1;status|null; (caso nao altere algum campo, fica a branco)
 server:
 type|artist_edit;artist_name|Quim Barreiros;bibliografia|random;count|2;albums|album1+album2;birth_date|11.11.1111;id|123456789;status|pending; (detalhes como no details, se quiseres podes aproveitar o codigo para mostrar)
@@ -175,7 +182,7 @@ type|artist_edit;artist_name|Quim Barreiros;id|123456789;status|accepted;
 EDITAR ALBUM:
 cliente:
 type|album_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;id|123456789;serverId|1;status|null;
-(caso dê accept)
+(caso fique pending):
 type|album_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;genre|Rock;release_date|11.00.1111;description|descricao;id|123456789;serverId|1;status|null;
 server:
 type|album_edit;artist_name|Radiohead;album_name|OK Computer;genre|Rock;release_date|11.00.1111;description|descricao;ratingAVG|9.2;countMusic|3;music|musica1+musica2+musica3;countReview|2;reviews|7+descricao*10+descricao;id|123456789;status|pending;
@@ -187,7 +194,7 @@ type|album_edit;artist_name|Radiohead;album_name|OK Computer;id|123456789;status
 EDITAR MUSICA:
 cliente:
 type|music_edit;username|nome;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;serverId|1;status|null;
-(caso dê accept)
+(caso fique pending):
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|;compositores|compositor1;id|123456789;status|null;
 server:
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;lyrics|letra;compositores|compositor1,compositor2;id|123456789;status|pending;
@@ -197,16 +204,56 @@ type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|
 type|music_edit;artist_name|Radiohead;album_name|OK Computer;music_name|nome;id|123456789;status|accepted;
 
 EDITAR PLAYLIST:
+cliente:
+type|playlist_edit;username|nome;playlist_name|nome;id|123456789;serverId|1;status|null;
+(caso fique pending): what -> delete (music -> musica(s) a apagar) // what -> add (music -> musica(s) a adicionar)
+type|playlist_edit;username|nome;playlist_name|nome;what|delete;music|artista,album,musica+artista2,album2,musica2;id|123456789;serverId|1;status|null;
+server:
+type|playlist_edit;playlist_name|nome;music|artista,album,musica+artista2,album2,musica2;id|123456789;status|pending;
+type|playlist_edit;playlist_name|nome;id|123456789;status|notfound;
+type|playlist_edit;username|nome;playlist_name|nome;id|123456789;status|nopermission; (caso seja privado e nao seja quem editou)
+type|playlist_edit;playlist_name|nome;id|123456789;status|rejected; //musica a adicionar nao existe (ou musica a apagar nao existe na playlist)
 
-
+(POR IMPLEMENTAR)
 EDITAR CONCERTO:
 
 APAGAR ARTISTA:
+cliente:
+type|delete_artist;username|nome;artist_name|Quim Barreiros;id|123456789;serverId|1;status|null;
+server:
+type|delete_artist;artist_name|Quim Barreiros;id|123456789;status|accepted;
+type|delete_artist;artist_name|Quim Barreiros;id|123456789;status|nopermission;
+type|delete_artist;artist_name|Quim Barreiros;id|123456789;status|notfound;
 
 APAGAR ALBUM:
+cliente:
+type|delete_album;username|nome;artist_name|Quim Barreiros;album|nome;id|123456789;serverId|1;status|null;
+server:
+type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|accepted;
+type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|nopermission;
+type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|notfound;
 
 APAGAR MUSICA:
+cliente:
+type|delete_music;username|nome;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;serverId|1;status|null;
+server:
+type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|accepted;
+type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|nopermission;
+type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|notfound;
 
 APAGAR PLAYLIST:
+cliente:
+type|delete_playlist;username|nome;name|nome;id|123456789;serverId|1;status|null;
+server:
+type|delete_playlist;name|nome;id|123456789;status|accepted;
+type|delete_playlist;name|nome;id|123456789;status|nopermission;
+type|delete_playlist;name|nome;id|123456789;status|notfound;
 
+(POR IMPLEMENTAR)
 APAGAR CONCERTO:
+cliente:
+type|delete_playlist;username|nome;name|nome;id|123456789;serverId|1;status|null;
+server:
+type|delete_playlist;name|nome;id|123456789;status|accepted;
+type|delete_playlist;name|nome;id|123456789;status|nopermission;
+type|delete_playlist;name|nome;id|123456789;status|notfound;
