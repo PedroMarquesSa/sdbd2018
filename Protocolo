@@ -229,19 +229,19 @@ type|delete_artist;artist_name|Quim Barreiros;id|123456789;status|notfound;
 
 APAGAR ALBUM:
 cliente:
-type|delete_album;username|nome;artist_name|Quim Barreiros;album|nome;id|123456789;serverId|1;status|null;
+type|delete_album;username|nome;artist_name|Quim Barreiros;album_name|nome;id|123456789;serverId|1;status|null;
 server:
-type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|accepted;
-type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|nopermission;
-type|delete_artist;artist_name|Quim Barreiros;album|nome;id|123456789;status|notfound;
+type|delete_artist;artist_name|Quim Barreiros;album_name|nome;id|123456789;status|accepted;
+type|delete_artist;artist_name|Quim Barreiros;album_name|nome;id|123456789;status|nopermission;
+type|delete_artist;artist_name|Quim Barreiros;album_name|nome;id|123456789;status|notfound;
 
 APAGAR MUSICA:
 cliente:
-type|delete_music;username|nome;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;serverId|1;status|null;
+type|delete_music;username|nome;artist_name|Quim Barreiros;album|nome;music_name|nomemusica;id|123456789;serverId|1;status|null;
 server:
-type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|accepted;
-type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|nopermission;
-type|delete_music;artist_name|Quim Barreiros;album|nome;music|nomemusica;id|123456789;status|notfound;
+type|delete_music;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;status|accepted;
+type|delete_music;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;status|nopermission;
+type|delete_music;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;status|notfound;
 
 APAGAR PLAYLIST:
 cliente:
