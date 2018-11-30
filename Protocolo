@@ -237,7 +237,7 @@ type|delete_artist;artist_name|Quim Barreiros;album_name|nome;id|123456789;statu
 
 APAGAR MUSICA:
 cliente:
-type|delete_music;username|nome;artist_name|Quim Barreiros;album|nome;music_name|nomemusica;id|123456789;serverId|1;status|null;
+type|delete_music;username|nome;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;serverId|1;status|null;
 server:
 type|delete_music;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;status|accepted;
 type|delete_music;artist_name|Quim Barreiros;album_name|nome;music_name|nomemusica;id|123456789;status|nopermission;
