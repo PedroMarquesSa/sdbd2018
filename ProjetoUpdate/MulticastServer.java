@@ -143,7 +143,7 @@ class MulticastServerThread extends Thread {
     private int idServer;
     private HashMap<String, String> map = new HashMap<>();
     //criar class(es) para aceder na thread
-    //private Ficheiros fich;
+    private Ficheiros fich;
     //para ver se sou EU a responder ou nao
     private boolean myTurn = false;
     //conexao com base de dados
@@ -151,10 +151,10 @@ class MulticastServerThread extends Thread {
     private FuncoesBD funcoesBD = null;
 
     MulticastServerThread(MulticastSocket socket, DatagramPacket packet, int counter, int idServer, boolean myTurn, Connection connection, FuncoesBD funcoesBD){
-        //fich = new Ficheiros(idServer);
+        fich = new Ficheiros(idServer);
         this.socket = socket;
         this.id = counter;
-        this.map = packet2Hashmap(packet);
+        this.map = fich.packet2Hashmap(packet);
         this.idServer = idServer;
         this.myTurn = myTurn;
         this.connection = connection;
@@ -213,171 +213,37 @@ class MulticastServerThread extends Thread {
                 break;
             case "new_album":
                 System.out.println("Adiciona album!!!");
-                try {
-                    temp = funcoesBD.addAlbum(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                temp = fich.addAlbum(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
             case "new_music":
                 System.out.println("Adiciona musica!!!");
-                try {
-                    temp = funcoesBD.addMusica(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                temp = fich.addMusica(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
-            case "search_album_by_artist":
-                System.out.println("procura album pelo nome do artista!!!");
-                try {
-                    temp = funcoesBD.searchAlbumArtista(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            case "search_artist":
+                System.out.println("procura album!!!");
+                temp = fich.searchArtista(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
-            case "search_album_by_title":
-                System.out.println("procura album pelo nome do album!!!");
-                try {
-                    temp = funcoesBD.searchAlbumTitle(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            case "search_album":
+                System.out.println("procura album!!!");
+                temp = fich.searchAlbum(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
             case "album_details":
                 System.out.println("detalhes album!!!");
-                try {
-                    temp = funcoesBD.detalhesAlbum(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "artist_details":
-                System.out.println("detalhes artista!!!");
-                try {
-                    temp = funcoesBD.detalhesArtista(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "music_details":
-                System.out.println("detalhes musica!!!");
-                try {
-                    temp = funcoesBD.detalhesMusica(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                temp = fich.detalhesAlbum(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
             case "album_critic":
                 System.out.println("critica album!!!");
-                try {
-                    temp = funcoesBD.writeReview(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "create_concert":
-                System.out.println("cria concerto!!!");
-                try {
-                    temp = funcoesBD.addConcert(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "add_compositor":
-                System.out.println("adiciona compositores!!!");
-                try {
-                    temp = funcoesBD.addCompositores(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "new_playlist":
-                System.out.println("cria playlist!!!");
-                try {
-                    temp = funcoesBD.addPlaylist(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "artist_edit":
-                System.out.println("edita artista!!!");
-                try {
-                    temp = funcoesBD.editArtista(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "album_edit":
-                System.out.println("edita album!!!");
-                try {
-                    temp = funcoesBD.editAlbum(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "music_edit":
-                System.out.println("edita musica!!!");
-                try {
-                    temp = funcoesBD.editMusica(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "delete_artist":
-                System.out.println("apaga artista!!!");
-                try {
-                    temp = funcoesBD.deleteArtista(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "delete_album":
-                System.out.println("apaga album!!!");
-                try {
-                    temp = funcoesBD.deleteAlbum(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(temp);
-                resposta = string2packet(temp);
-                break;
-            case "delete_music":
-                System.out.println("apaga musica!!!");
-                try {
-                    temp = funcoesBD.deleteMusica(this.map);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                temp = fich.writeReview(this.map);
                 System.out.println(temp);
                 resposta = string2packet(temp);
                 break;
@@ -399,20 +265,6 @@ class MulticastServerThread extends Thread {
     private DatagramPacket string2packet(String temp) {
         byte[] buffer = temp.getBytes();
         return new DatagramPacket(buffer, buffer.length, group, PORT);
-    }
-
-
-    public HashMap<String, String> packet2Hashmap(DatagramPacket packet) {
-        HashMap<String, String> aux = new HashMap<>();
-        String message = new String(packet.getData(), 0, packet.getLength());
-        String[] temp = message.split(";");
-        String[] each;
-
-        for (int i=0; i<temp.length; i++) {
-            each = temp[i].split("\\|");
-            aux.put(each[0], each[1]);
-        }
-        return aux;
     }
 }
 
@@ -445,16 +297,26 @@ class User implements Serializable {
 
 //Classes Musica (EM ARVORE, hierarquico) !!!!!!!!!
 
+//class com tudo, ou seja, class geral, apenas uma!!!
+class Biblioteca implements Serializable {
+    public ArrayList<Artista> artistas;
+
+    public Biblioteca() {
+        this.artistas = new ArrayList<>();
+    }
+}
 
 class Artista implements Serializable {
     public String nome;
     public String descricao;
     public String dataNascimento;
+    public ArrayList<Album> albums;
 
-    public Artista(String nome, String descricao, String dataNascimento) {
+    public Artista(String nome, String descricao, String dataNascimento, ArrayList<Album> albums) {
         this.nome = nome;
         this.descricao = descricao;
         this.dataNascimento = dataNascimento;
+        this.albums = albums;
     }
 }
 
@@ -463,18 +325,16 @@ class Album implements Serializable {
     public String descricao;
     public String nome;
     public float ratingAVG;
-    public String genero;
-    public String dataLancamento;
-    public String editora;
+    public ArrayList<Review> reviews;
+    public ArrayList<Musica> musicas;
 
-    public Album(String artista, String descricao, String nome, float ratingAVG, String genero,String dataLancamento, String editora) {
+    public Album(String artista, String descricao, String nome, float ratingAVG, ArrayList<Review> reviews, ArrayList<Musica> musicas) {
         Artista = artista;
         this.descricao = descricao;
         this.nome = nome;
         this.ratingAVG = ratingAVG;
-        this.genero = genero;
-        this.dataLancamento = dataLancamento;
-        this.editora = editora;
+        this.reviews = reviews;
+        this.musicas = musicas;
     }
 }
 
@@ -482,13 +342,11 @@ class Musica implements Serializable {
     public String nome;
     public String Artista;
     public String Album;
-    public String letra;
 
-    public Musica(String nome, String artista, String album, String letra) {
+    public Musica(String nome, String artista, String album) {
         this.nome = nome;
-        this.Artista = artista;
-        this.Album = album;
-        this.letra = letra;
+        Artista = artista;
+        Album = album;
     }
 }
 
