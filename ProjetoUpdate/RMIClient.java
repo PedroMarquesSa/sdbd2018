@@ -23,6 +23,8 @@ public class RMIClient {
         return name;
     }
 
+    static public String whatIsIt = "normal";
+
     public void setName(String givenName) {
         name = givenName;
     }
@@ -89,10 +91,9 @@ public class RMIClient {
 
         System.out.println("Prima enter");
 
-        isEditor = true; //apagar depois
         trueOrFalse = true;
         while(trueOrFalse == true) {
-            if(isEditor == true) {
+            if(whatIsIt.equals("editor")) {
                 trueOrFalse = menuEditor(rmiinterface, username, password);
             }
             else{
@@ -159,11 +160,11 @@ public class RMIClient {
                     break;
                 case 9:
                     System.out.println("editar playlist");
-                    //editarPlaylist(rmiinterface, username);
+                    editarPlaylist(rmiinterface, username);
                     break;
                 case 10:
                     System.out.println("escrever critica");
-                    //escreverCriticaAlbum(rmiinterface, username);
+                    escreverCriticaAlbumRMIClient(rmiinterface, username);
                     break;
                 case 11:
                     System.out.println("upload ficheiro musica");
@@ -244,18 +245,33 @@ public class RMIClient {
 
 
     public static boolean loginRMIClient(RMIInterface rmiinterface, String username, String password) throws RemoteException{
-        String text;
-        text = rmiinterface.loginRMIServer(username, password);
+        String text, protocol;
+
+        //text = rmiinterface.loginRMIServer(username, password);
         //System.out.println("Server: "+text);
-        if(text.equals("accepted")){
+
+        protocol = "type|login;username|"+username+";password|"+password;
+        text = rmiinterface.enviarParaMulticast(protocol);
+        System.out.println("Server: "+text);
+
+        String[] parts = text.split(";");
+        String[] partsWhat = parts[3].split("\\|");
+        whatIsIt = partsWhat[1];
+        System.out.println("whatIsIt="+whatIsIt);
+        String[] parts2 = parts[5].split("\\|");
+        String status = parts2[1];
+        System.out.println("status="+status);
+
+
+        if(status.equals("accepted")){
             System.out.println("Login efetuado com sucesso!");
             return true;
         }
-        else if(text.equals("wrongusername")){
+        else if(status.equals("wrongusername")){
             System.out.println("Utilizador inexistente!");
             return false;
         }
-        else if(text.equals("wrongpassword")){
+        else if(status.equals("wrongpassword")){
             System.out.println("Password incorreta!");
             return false;
         }
@@ -377,6 +393,7 @@ public class RMIClient {
         System.out.print("Data nascimento (dd.mm.aaaa):");
         birth_date = sc.nextLine();
 
+        /*
         System.out.print("A quantos grupos pertence:");
         nGrupos = sc.nextInt();
         if(nGrupos==0){
@@ -394,7 +411,10 @@ public class RMIClient {
             grupos += auxGrupo;
 
         }
+        */
 
+        System.out.print("Grupos:");
+        grupos = sc.nextLine();
         protocol = "type|new_artist;username|"+username+";artist_name|"+artist_name+";grupo|"+grupos+";description|"+description+";birth_date|"+birth_date;
 
         text = rmiinterface.enviarParaMulticast(protocol);
@@ -484,9 +504,9 @@ public class RMIClient {
         //System.out.println("Server: "+text);
 
         String[] parts = text.split(";");
-        String[] parts2 = parts[10].split("\\|");
+        String[] parts2 = parts[5].split("\\|");
         String status = parts2[1];
-        System.out.println("status="+status);
+        //System.out.println("status="+status);
 
         if(status.equals("accepted")){
             System.out.println("Album adicionado com sucesso!");
@@ -570,6 +590,7 @@ public class RMIClient {
         System.out.print("Nome da musica:");
         music_name = sc.nextLine();
 
+        /*
         System.out.print("Quantos compositores:");
         nCompositores = sc.nextInt();
 
@@ -588,25 +609,29 @@ public class RMIClient {
             compositores += auxCompositor;
 
         }
+        */
 
-        protocol = "type|add_compositor;username|"+username+";artist_name|"+artist_name+";album_name|"+album_name+";music_name|"+music_name+";compositores|"+compositores;
+        System.out.println("Compositores (no caso de serem mais que 1 separar por vírgula):");
+        compositores = sc.nextLine();
+
+        protocol = "type|add_compositor;username|"+username+";artist_name|"+artist_name+";album_name|"+album_name+";music_name|"+music_name+";compositor_name|"+compositores;
         text = rmiinterface.enviarParaMulticast(protocol);
         //System.out.println("Server: "+text);
 
         String[] parts = text.split(";");
-        String[] parts2 = parts[8].split("\\|");
+        String[] parts2 = parts[6].split("\\|");
         String status = parts2[1];
         //System.out.println("status="+status);
 
-        if(text.equals("accepted")){
+        if(status.equals("accepted")){
             System.out.println("Adicionado com sucesso!");
             return;
         }
-        else if(text.equals("notfound")){
+        else if(status.equals("notfound")){
             System.out.println("Nao encontrado.");
             return;
         }
-        else if(text.equals("nopermission")){
+        else if(status.equals("nopermission")){
             System.out.println("O utilizador nao tem permissao para esta acao.");
             return;
         }
