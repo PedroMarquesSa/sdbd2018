@@ -25,8 +25,8 @@ public interface RMIInterface extends Remote{
     public String introduzirAlbumRMIServer(String username, String artist_name, String album_name, String description, String genero, String releaseDate, String recordlabel) throws RemoteException;
     public String introduzirMusicaRMIServer(String username, String artist_name, String album_name, String music_name) throws RemoteException;
 
-    public String pesquisarAlbumPorArtistaRMIServer(String username, String artist_name) throws RemoteException;
-    public String pesquisarAlbumPorTituloRMIServer(String username, String album_name) throws RemoteException;
+    public String pesquisarAlbumPorArtistaRMIServer(String artist_name) throws RemoteException;
+    public String pesquisarAlbumPorTituloRMIServer(String album_name) throws RemoteException;
 
     public String pesquisarArtistaRMIServer(String album_name) throws RemoteException;
 

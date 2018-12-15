@@ -20,7 +20,7 @@ public class GoToSearchArtistAction extends ActionSupport implements SessionAwar
 		return SUCCESS;
 	}
 	
-	public void setArtist_name(String username) {
+	public void setArtist_name(String artist_name) {
 		this.artist_name = artist_name;
 	}
 

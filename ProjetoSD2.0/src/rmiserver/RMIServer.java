@@ -245,7 +245,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     @Override
-    public String pesquisarAlbumPorArtistaRMIServer(String username, String artist_name) throws RemoteException{
+    public String pesquisarAlbumPorArtistaRMIServer(String artist_name) throws RemoteException{
         int serverID = 1;
 
         Random rand = new Random();
@@ -272,7 +272,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     @Override
-    public String pesquisarAlbumPorTituloRMIServer(String username, String album_name) throws RemoteException{
+    public String pesquisarAlbumPorTituloRMIServer(String album_name) throws RemoteException{
         int serverID = 1;
 
         Random rand = new Random();

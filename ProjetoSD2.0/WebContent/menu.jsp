@@ -24,9 +24,9 @@
 	<p><button type="button" onclick="">Modificar dados</button></p>
 	<p><button type="button" onclick="">Apagar dados</button></p>
 	<p><button type="button" onclick="">Conceder privilegios de editor a um utilizador</button></p>
-	<!--<p><button type="button" onclick="">Pesquisar artista</button></p>-->
-	<p><a href="<s:url action="goToSearchArtist" />">Pesquisar artista</a></p>
-	<p><button type="button" onclick="">Pesquisar album</button></p>
+	<p><a href="<s:url action="goToSearchArtist" />">Consultar detalhes artista</a></p>
+	<p><a href="<s:url action="goToSearchAlbumByArtist" />">Pesquisar album por artista</a></p>
+	<p><a href="<s:url action="goToSearchAlbumByTitle" />">Pesquisar album por titulo</a></p>
 	<p><button type="button" onclick="">Pesquisar musica</button></p>
 	<p><button type="button" onclick="">Criar playlist</button></p>
 	<p><button type="button" onclick="">Editar playlist</button></p>

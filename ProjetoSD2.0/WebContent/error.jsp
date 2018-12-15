@@ -8,6 +8,8 @@
 <title>Hey!</title>
 </head>
 <body>
+	<p><a href="<s:url action="goToMenu" />">Voltar ao menu</a></p>
+	<br>
 	<h4>You got an exception. Please <i>throw</i> it to someone who can handle it.</h4>
 	<p><s:property value="exceptionStack" /></p>
 </body>

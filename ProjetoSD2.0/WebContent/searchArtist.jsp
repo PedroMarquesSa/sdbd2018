@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Pesquisar artista</title>
+<title>Consultar detalhes artista</title>
 </head>
 <body>
 	<s:form action="searchArtist" method="post">

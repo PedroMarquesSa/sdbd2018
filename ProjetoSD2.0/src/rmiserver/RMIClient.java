@@ -713,13 +713,14 @@ public class RMIClient {
                 System.out.print("Nome do artista:");
                 sc = new Scanner(System.in);
                 artist_name = sc.nextLine();
-                text = rmiinterface.pesquisarAlbumPorArtistaRMIServer(username, artist_name);
+                //text = rmiinterface.pesquisarAlbumPorArtistaRMIServer(username, artist_name);
+                text = rmiinterface.pesquisarAlbumPorArtistaRMIServer(artist_name);
                 System.out.println(text);
                 break;
             case 2:
                 System.out.print("Titulo do album:");
                 album_name = sc.nextLine();
-                text = rmiinterface.pesquisarAlbumPorTituloRMIServer(username, album_name);
+                text = rmiinterface.pesquisarAlbumPorTituloRMIServer(album_name);
                 break;
             default:
                 System.out.println("Opcao invalida!");
