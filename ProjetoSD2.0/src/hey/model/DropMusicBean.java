@@ -17,7 +17,8 @@ public class DropMusicBean {
 	private RMIInterface server;
 	private String username; // username and password supplied by the user
 	private String password;
-	private String artist_name, album_name;
+	private String artist_name, album_name, music_name, critic;
+	private int rating;
 
 	public DropMusicBean() {
 		try {
@@ -52,6 +53,14 @@ public class DropMusicBean {
 		return server.pesquisarAlbumPorTituloRMIServer(album_name);
 	}
 
+	public String consultarDetalhesMusica(String artist_name, String album_name, String music_name) throws RemoteException {
+		return server.consultarDetalhesMusicaRMIServer(artist_name, album_name, music_name);
+	}
+
+	public String escreverCriticaAlbum(String artist_name, String album_name, String critic, int rating) throws RemoteException {
+		return server.escreverCritiaAlbumRMIServer(username, artist_name, album_name, critic, rating);
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -66,5 +75,17 @@ public class DropMusicBean {
 
 	public void setAlbum_name(String album_name) {
 		this.album_name = album_name;
+	}
+
+	public void setMusic_name(String music_name) {
+		this.music_name = music_name;
+	}
+
+	public void setCritic(String critic) {
+		this.critic = critic;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
 	}
 }

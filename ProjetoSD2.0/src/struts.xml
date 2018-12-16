@@ -42,6 +42,10 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
       <result name="login">/register.jsp</result>
     </action>
 
+    <action name="goToMenu" class="hey.action.GoToMenuAction" method="execute">
+      <result name="success">/menu.jsp</result>
+    </action>
+
     <action name="goToSearchArtist" class="hey.action.GoToSearchArtistAction" method="execute">
       <result name="success">/searchArtist.jsp</result>
     </action>
@@ -69,9 +73,24 @@ and should reside on the classpath of the webapp (generally /WEB-INF/classes). -
         <result name="login">/error.jsp</result>
     </action>
 
-    <action name="goToMenu" class="hey.action.GoToMenuAction" method="execute">
-        <result name="success">/menu.jsp</result>
+    <action name="goToDetailsMusic" class="hey.action.GoToDetailsMusicAction" method="execute">
+        <result name="success">/detailsMusic.jsp</result>
     </action>
+
+    <action name="detailsMusic" class="hey.action.DetailsMusicAction" method="execute">
+        <result name="success">/detailsMusic.jsp</result>
+        <result name="login">/error.jsp</result>
+    </action>
+
+    <action name="goToAlbumCritic" class="hey.action.GoToAlbumCriticAction" method="execute">
+          <result name="success">/albumCritic.jsp</result>
+    </action>
+
+    <action name="albumCritic" class="hey.action.AlbumCriticAction" method="execute">
+        <result name="success">/albumCritic.jsp</result>
+        <result name="login">/error.jsp</result>
+    </action>
+
 
 
 

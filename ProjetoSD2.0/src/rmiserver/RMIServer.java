@@ -331,6 +331,65 @@ public class RMIServer extends UnicastRemoteObject implements RMIInterface {
     }
 
     @Override
+    public String consultarDetalhesMusicaRMIServer(String artist_name, String album_name, String music_name) throws RemoteException{
+        int serverID = 1;
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
+        String protocol = "type|music_details;artist_name|"+artist_name+";album_name|"+album_name+";music_name|"+music_name+";id|"+id+";serverId|"+serverID+";status|null;";
+        System.out.println(protocol+"\n");
+
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        MulticastUser user = new MulticastUser(protocol);
+        user.start();
+
+        //Para que nao receba a mensagem enviada por ele proprio pelo broadcast
+        String respostaClient = null;
+        try{
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+
+        return respostaClient;
+        /* FALTA ADAPTAR A ESTA FUNCAO
+        String[] parts = respostaClient.split(";");
+        String[] parts2 = parts[4].split("\\|");
+        String status = parts2[1];
+        System.out.println("parts2[1]= "+parts2[1]);*/
+    }
+
+    @Override
+    public String escreverCritiaAlbumRMIServer(String username, String artist_name, String album_name, String critic, int rating) throws RemoteException{
+        int serverID = 1;
+
+        Random rand = new Random();
+        int id = rand.nextInt(999999999) + 1;
+
+        String protocol = "type|album_critic;username|"+username+";artist_name|"+artist_name+";album_name|"+album_name+";critic|"+critic+";rating|"+rating+";id|"+id+";serverId|"+serverID+";status|null;";
+        System.out.println(protocol+"\n");
+
+        MulticastClient client = new MulticastClient();
+        client.start();
+
+        MulticastUser user = new MulticastUser(protocol);
+        user.start();
+
+        //Para que nao receba a mensagem enviada por ele proprio pelo broadcast
+        String respostaClient = null;
+        try{
+            Thread.sleep(500);
+            respostaClient = client.getResposta();
+            System.out.println("RESPOSTA CLIENT: "+respostaClient);
+        }catch(Exception e){}
+
+        return respostaClient;
+    }
+
+    @Override
     public String enviarParaMulticast(String protocol) throws RemoteException{
         int serverID = 1;
 

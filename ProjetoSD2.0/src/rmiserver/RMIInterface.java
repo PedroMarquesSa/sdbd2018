@@ -30,13 +30,14 @@ public interface RMIInterface extends Remote{
 
     public String pesquisarArtistaRMIServer(String album_name) throws RemoteException;
 
+    public String consultarDetalhesMusicaRMIServer(String artist_name, String album_name, String music_name) throws RemoteException;
+    public String escreverCritiaAlbumRMIServer(String username, String artist_name, String album_name, String critic, int rating) throws RemoteException;
+
     public String enviarParaMulticast(String protocol) throws RemoteException;
 
     /*
 	public String consultarDetalhesArtistaRMIServer(String username, String artist_name) throws RemoteException;
 	public String consultarDetalhesAlbumRMIServer(String username, String album_name) throws RemoteException;
-
-	public String escreverCriticaAlbumRMIServer(String username, String album) throws RemoteException;
 
 	public criarConcerto(String username, String[] artistas, ...) throws RemoteException;
 	*/

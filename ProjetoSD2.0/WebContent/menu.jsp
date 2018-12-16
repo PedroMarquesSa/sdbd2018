@@ -27,10 +27,11 @@
 	<p><a href="<s:url action="goToSearchArtist" />">Consultar detalhes artista</a></p>
 	<p><a href="<s:url action="goToSearchAlbumByArtist" />">Pesquisar album por artista</a></p>
 	<p><a href="<s:url action="goToSearchAlbumByTitle" />">Pesquisar album por titulo</a></p>
+	<p><a href="<s:url action="goToDetailsMusic" />">Consultar detalhes musica</a></p>
 	<p><button type="button" onclick="">Pesquisar musica</button></p>
 	<p><button type="button" onclick="">Criar playlist</button></p>
 	<p><button type="button" onclick="">Editar playlist</button></p>
-	<p><button type="button" onclick="">Escrever critica a um album</button></p>
+	<p><a href="<s:url action="goToAlbumCritic" />">Escrever critica a um album</a></p>
 	<p><button type="button" onclick="">Upload de ficheiro para associar a uma musica</button></p>
 
 	<p><a href="<s:url action="login" />">Log Out</a></p>
